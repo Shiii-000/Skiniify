@@ -1,239 +1,170 @@
-/* 🎨 Skiniify - CS:GO/CS2 Item Tracker Styles */
+/* 🎨 Skiniify - Modern Clean Styles */
 
 /* ==========================================
    BASE STYLES
    ========================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background-color: #111827; /* gray-900 */
-  color: #f3f4f6; /* gray-100 */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  line-height: 1.5;
 }
 
 /* ==========================================
-   SCROLLBAR STYLING
+   TYPOGRAPHY
    ========================================== */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1f2937; /* gray-800 */
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #4b5563; /* gray-600 */
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #6b7280; /* gray-500 */
-}
+h1 { font-size: 2rem; font-weight: 700; }
+h2 { font-size: 1.5rem; font-weight: 600; }
+p { color: #a3a3a3; margin-bottom: 1rem; }
 
 /* ==========================================
-   SELECTION COLOR
+   LAYOUT UTILITIES
    ========================================== */
-
-::selection {
-  background-color: #f97316; /* orange-500 */
-  color: white;
-}
+.max-w-xl { max-width: 42rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.text-center { text-align: center; }
 
 /* ==========================================
-   FOCUS & INTERACTION
+   COMPONENT STYLES
    ========================================== */
 
-:focus-visible {
-  outline: 2px solid #f97316;
-  outline-offset: 2px;
+/* Header */
+header {
+  background-color: #1e1e1e99;
+  backdrop-filter: blur(8px);
 }
 
-button:focus-visible {
-  outline: 2px solid #3b82f6; /* blue-500 */
-  outline-offset: 2px;
+nav a {
+  transition: color 0.2s ease, background-color 0.2s ease;
 }
+
+/* Hero Section */
+.hero h1 span { color: #f97316; }
+
+.hero p { max-width: 32rem; margin: 0 auto 1.5rem; }
+
+.hero a { text-decoration: none; }
 
 /* ==========================================
-   SMOOTH SCROLLING
+   CARDS & CONTAINERS
    ========================================== */
-
-html {
-  scroll-behavior: smooth;
-}
-
-/* ==========================================
-   UTILITY CLASSES
-   ========================================== */
-
-/* Flex center utility */
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Text gradient utility */
-.text-gradient {
-  background: linear-gradient(to right, #f97316, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ==========================================
-   CARD STYLING
-   ========================================== */
-
-.card {
-  background-color: #1f2937; /* gray-800 */
-  border: 1px solid #374151; /* gray-700 */
+.card,
+.calc-form,
+.total-value-card,
+.inventory-table {
+  background-color: #1e1e1e;
   border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  border: 1px solid #333333;
 }
 
-.card:hover {
+.card:hover,
+.calc-form,
+.inventory-table {
+  transition: all 0.3s ease;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3),
-              0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* ==========================================
-   INPUT STYLING
+   FORM ELEMENTS
    ========================================== */
-
 input[type="text"],
-input[type="number"],
-textarea {
-  background-color: #374151; /* gray-700 */
-  border: 1px solid #4b5563; /* gray-600 */
-  color: white;
+input[type="number"] {
+  background-color: #2a2a2a;
+  border: 1px solid #444444;
+  color: #ffffff;
   border-radius: 8px;
   padding: 0.75rem;
+  font-size: 0.9375rem;
   transition: all 0.2s ease;
 }
 
 input[type="text"]:focus,
-input[type="number"]:focus,
-textarea:focus {
-  border-color: #f97316; /* orange-500 */
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+input[type="number"]:focus {
+  border-color: #f97316;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
 }
 
-input[type="text"]::placeholder,
-textarea::placeholder {
-  color: #6b7280; /* gray-500 */
-}
+input::placeholder { color: #666666; }
 
 /* ==========================================
-   BUTTON STYLING
+   BUTTONS
    ========================================== */
-
-button {
+button,
+a.btn {
+  display: inline-block;
   font-weight: 600;
+  text-align: center;
   border-radius: 8px;
   padding: 0.75rem 1.5rem;
-  transition: all 0.2s ease;
   cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none !important;
+  border: none !important;
 }
 
-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+button:hover,
+a.btn:hover { transform: translateY(-1px); }
+button:active,
+a.btn:active { transform: translateY(0); }
+
+/* Primary buttons */
+.bg-orange-600:hover { background-color: #ea580c; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
+.bg-blue-600:hover { background-color: #2563eb; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
+
+/* ==========================================
+   RESULTS CARDS
+   ========================================== */
+.result-card {
+  background-color: rgba(30, 30, 30, 0.8);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border-left-width: 4px;
+  transition: all 0.3s ease;
 }
 
-button:active {
-  transform: translateY(0);
+.result-card:hover { transform: translateX(5px); }
+/* Success (green) */
+.success { border-left-color: #22c55e; }
+/* Info (blue) */
+.info { border-left-color: #3b82f6; }
+/* Warning (yellow) */
+.warning { border-left-color: #fbbf24; }
+/* Danger (red) */
+.danger { border-left-color: #ef4444; }
+
+.result-label {
+  font-size: 0.875rem;
+  color: #a3a3a3;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-bottom: 0.25rem;
+}
+
+.result-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 /* ==========================================
-   NAVIGATION STYLING
+   TABLE STYLES
    ========================================== */
+table { width: 100%; border-collapse: collapse; }
+th { font-weight: 600; color: #a3a3a3; text-align: left; padding: 1rem; }
+td { padding: 1rem; border-bottom: 1px solid #333333; }
+tr.table-row:hover td { background-color: #242424; }
 
-nav a {
-  position: relative;
-  text-decoration: none;
-}
-
-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #f97316; /* orange-500 */
-  transition: width 0.3s ease;
-}
-
-nav a:hover::after {
-  width: 100%;
-}
-
-/* ==========================================
-   ANIMATIONS
-   ========================================== */
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(249, 115, 22, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.slide-in {
-  animation: slideIn 0.3s ease-out;
-}
-
-.animate-pulse-custom {
-  animation: pulse 2s ease-in-out infinite;
-}
+.item-cell .item-name { font-weight: 500; color: #ffffff; display: flex; gap: 0.75rem; align-items: center; }
+.wear-info { font-size: 0.875rem; color: #a3a3a3; margin-top: 0.25rem; }
+.text-right { text-align: right !important; }
 
 /* ==========================================
    WEAR BADGES
    ========================================== */
-
 .wear-badge {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -241,210 +172,20 @@ nav a:hover::after {
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  transition: all 0.3s ease;
-}
-
-.wear-badge:hover {
-  transform: scale(1.05);
+  letter-spacing: 0.025em;
 }
 
 /* ==========================================
-   RESULT CARDS
+   ANIMATIONS
    ========================================== */
-
-.result-card {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 1.25rem;
-  border-left: 4px solid #f97316;
-  transition: all 0.3s ease;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.result-card:hover {
-  transform: translateX(5px);
-}
+.fade-in { animation: fadeIn 0.3s ease-out; }
 
 /* ==========================================
-   TABLE STYLING
+   FOOTER
    ========================================== */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  font-weight: 600;
-  text-align: left;
-  padding: 1rem;
-  border-bottom: 2px solid #374151;
-}
-
-td {
-  padding: 1rem;
-  border-bottom: 1px solid #374151;
-}
-
-tr:last-child td {
-  border-bottom: none;
-}
-
-tr:hover td {
-  background-color: rgba(249, 115, 22, 0.1);
-}
-
-/* ==========================================
-   MOBILE RESPONSIVE
-   ========================================== */
-
-@media (max-width: 768px) {
-  .grid.md\:grid-cols-3 {
-    grid-template-columns: 1fr;
-  }
-  
-  .text-5xl {
-    font-size: 2.5rem;
-  }
-  
-  .text-4xl {
-    font-size: 2rem;
-  }
-  
-  .text-3xl {
-    font-size: 1.875rem;
-  }
-}
-
-/* ==========================================
-   LOW VALUE INDICATORS
-   ========================================== */
-
-.low-value-item {
-  animation: pulse 1s ease-in-out infinite;
-  position: relative;
-}
-
-.low-value-item::after {
-  content: '🔥';
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-}
-
-/* ==========================================
-   WEAPON CATEGORY BADGES
-   ========================================== */
-
-.weapon-badge-factory-new {
-  background-color: #22c55e; /* green-500 */
-  color: white;
-}
-
-.weapon-badge-minimal-wear {
-  background-color: #3b82f6; /* blue-500 */
-  color: white;
-}
-
-.weapon-badge-field-tested {
-  background-color: #f97316; /* orange-500 */
-  color: white;
-}
-
-.weapon-badge-well-worn {
-  background-color: #eab308; /* yellow-500 */
-  color: black;
-}
-
-.weapon-badge-battle-scarred {
-  background-color: #ef4444; /* red-500 */
-  color: white;
-}
-
-/* ==========================================
-   LOADING STATES
-   ========================================== */
-
-.loading {
-  pointer-events: none;
-  opacity: 0.7;
-}
-
-.loading::after {
-  content: '';
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  border-right-color: transparent;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ==========================================
-   FOOTER STYLING
-   ========================================== */
-
-footer {
-  background-color: #1f2937; /* gray-800 */
-  border-top: 1px solid #374151; /* gray-700 */
-}
-
-/* ==========================================
-   HEADER NAVIGATION
-   ========================================== */
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* ==========================================
-   GRADIENT TEXT
-   ========================================== */
-
-.gradient-text {
-  background: linear-gradient(135deg, #f97316, #3b82f6, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ==========================================
-   RESPONSIVE TYPOGRAPHY
-   ========================================== */
-
-h1 {
-  font-size: 2.5rem;
-  line-height: 1.2;
-}
-
-@media (min-width: 768px) {
-  h1 {
-    font-size: 3rem;
-  }
-}
-
-/* ==========================================
-   UTILITY: HIDDEN WITH ANIMATION
-   ========================================== */
-
-.hidden-anim {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.3s ease;
-}
-
-.hidden-anim.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+footer { background-color: #1e1e1e; border-top: 1px solid #333333; padding: 1.5rem 0; }

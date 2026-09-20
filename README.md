@@ -119,7 +119,7 @@ curl -X POST http://localhost:8000/api/trade-up-calculate \
 ## 🐛 Bug Reports / Feature Requests
 
 Join our Discord community to report issues or suggest features:
-**[Discord Server Coming Soon!]**
+**[Join Discord](https://discord.gg/anKZZ7FpwH)**
 
 ---
 
