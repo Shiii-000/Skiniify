@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skiniify - CS:GO/CS2 Item Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script src="skin-images.js"></script>
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        
+        .wear-badge { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .wear-badge:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1e1e1e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
+    </style>
+</head>
+<body class="bg-[#121212] text-white font-sans min-h-screen">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#1e1e1e]/95 backdrop-blur border-b border-[#333]">
+        <nav class="max-w-xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 text-xl font-bold hover:text-orange-500 transition group">
+                <span class="text-2xl group-hover:scale-110 transition-transform">🔪</span>
+                Skiniify
+            </a>
+            <div class="flex gap-1">
+                <a href="#calculator" class="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#2a2a2a] rounded-lg transition">Calculator</a>
+                <a href="#inventory" class="px-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-[#2a2a2a] rounded-lg transition">Inventory</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-xl mx-auto px-4 py-8">
+        
+        <!-- Hero Section -->
+        <section class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold mb-3">Welcome to <span class="text-orange-500">Skiniify</span></h1>
+            <p class="text-gray-400 text-sm md:text-base max-w-md mx-auto mb-6">Your CS:GO/CS2 item tracker for trade-ups, inventory management, and market insights.</p>
+            
+            <div class="flex gap-3 justify-center flex-wrap">
+                <a href="#calculator" class="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg shadow-orange-900/20">Trade-Up Calculator</a>
+                <a href="#inventory" class="px-5 py-2.5 bg-[#2d2d2d] border border-[#3a3a3a] hover:border-[#4a4a4a] text-sm font-medium text-gray-300 hover:text-white rounded-lg transition transform hover:-translate-y-0.5">Inventory Manager</a>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-orange-600/50 transition group">
+                <div class="text-orange-500 text-2xl mb-2">🔪</div>
+                <h3 class="text-lg font-semibold mb-1">Trade-Up Calculator</h3>
+                <p class="text-gray-500 text-xs">Calculate expected wear and value for 3 items.</p>
+            </div>
+            
+            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-blue-600/50 transition group">
+                <div class="text-blue-500 text-2xl mb-2">📊</div>
+                <h3 class="text-lg font-semibold mb-1">Market Tracker</h3>
+                <p class="text-gray-500 text-xs">Real-time price tracking with history charts.</p>
+            </div>
+            
+            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-purple-600/50 transition group">
+                <div class="text-purple-500 text-2xl mb-2">🎒</div>
+                <h3 class="text-lg font-semibold mb-1">Inventory Manager</h3>
+                <p class="text-gray-500 text-xs">Track skins, portfolio value, and low-value items.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1e1e1e] py-6 mt-12 border-t border-[#333]">
+        <div class="max-w-xl mx-auto px-4 text-center text-gray-500 text-xs">
+            <p>© 2024 Skiniify — Built by <span class="text-orange-500 font-semibold">Shii-000</span></p>
+            <a href="https://discord.gg/anKZZ7FpwH" target="_blank" class="mt-2 inline-block px-6 py-2 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-full text-sm font-semibold transition transform hover:-translate-y-0.5">🎮 Join Discord Community</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="calculator.js"></script>
+    <script src="inventory.js"></script>
+    
+    <!-- Image loading on page load -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pre-load common weapon icons
+            const weapons = ['AK-47', 'M4A1-S', 'AWP', 'M4A4', 'Glock'];
+            
+            weapons.forEach(async (weapon) => {
+                try {
+                    const imageUrl = window.SkiniifyImages.getWeaponImageUrl(weapon);
+                    if (imageUrl) {
+                        const img = document.createElement('img');
+                        img.src = `http://localhost:8000${imageUrl}`;
+                        img.style.opacity = '0';
+                        img.className = 'preloaded-weapon-icon';
+                        document.body.appendChild(img);
+                    }
+                } catch(e) {
+                    console.log('Pre-load failed for:', weapon, e);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
