@@ -1,27 +1,144 @@
-/* ==========================================\n   WEAPON IMAGES & ICONS\n   ========================================== */
-.inline-weapon-icon {
-  border-radius: 50%;
-  border: 2px solid #4b5563;
-  transition: all 0.3s ease;
-}
-.inline-weapon-icon:hover {
-  transform: scale(1.2);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+/* Skiniify - CS:GO/CS2 Trade-Up Calculator Styles */
+
+/* ==========================================
+   BASE STYLES
+   ========================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  line-height: 1.5;
 }
 
-.preloaded-weapon-icon {
-  position: fixed;
-  top: 0;
-  left: -9999px;
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+.fade-in { 
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* ==========================================\n   ANIMATIONS\n   ========================================== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.fade-in { animation: fadeIn 0.3s ease-out; }
+/* ==========================================
+   WEAPON & SKIN BADGES
+   ========================================== */
+.weapon-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
 
-/* ==========================================\n   FOOTER\n   ========================================== */
-footer { background-color: #1e1e1e; border-top: 1px solid #333333; padding: 1.5rem 0; }
+/* Rarity tier colors */
+.wear-badge-factory-new { background-color: #22c55e; color: white; }
+.wear-badge-minimal-wear { background-color: #3b82f6; color: white; }
+.wear-badge-field-tested { background-color: #f97316; color: white; }
+.wear-badge-well-worn { background-color: #eab308; color: black; }
+.wear-badge-battle-scarred { background-color: #ef4444; color: white; }
+
+/* Rarity tier badges */
+.wear-badge-mil-spec { background-color: #9ca3af; }
+.wear-badge-restricted { background-color: #f97316; }
+.wear-badge-classified { background-color: #eab308; }
+.wear-badge-covert { background-color: #a855f7; }
+
+/* ==========================================
+   WEAPON ICONS
+   ========================================== */
+.inline-weapon-icon {
+  border-radius: 50%;
+  border: 2px solid #4b5563;
+  transition: all 0.3s ease;
+}
+
+.inline-weapon-icon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+/* ==========================================
+   PRICE INDICATORS
+   ========================================== */
+.price-up { color: #22c55e; }
+.price-down { color: #ef4444; }
+
+/* ==========================================
+   CARD & CONTAINER STYLES
+   ========================================== */
+.card,
+.calc-form,
+.total-value-card {
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================
+   FORM ELEMENTS
+   ========================================== */
+input[type="text"],
+input[type="number"] {
+  background-color: #2a2a2a;
+  border: 1px solid #444444;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #f97316;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+}
+
+input::placeholder { color: #666666; }
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+button {
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover { transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+
+/* ==========================================
+   HEADER & NAVIGATION
+   ========================================== */
+header {
+  background-color: #1e1e1e99;
+  backdrop-filter: blur(8px);
+}
+
+nav a { transition: color 0.2s ease, background-color 0.2s ease; }
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+footer { 
+  background-color: #1e1e1e; 
+  border-top: 1px solid #333333; 
+  padding: 1.5rem 0; 
+}

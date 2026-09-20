@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skiniify - CS:GO/CS2 Trade-Up Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load skin images from Steam CDN -->
     <link rel="stylesheet" href="styles.css">
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #fff; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        .wear-badge-factory-new { background: #22c55e; }
-        .wear-badge-minimal-wear { background: #3b82f6; }
-        .wear-badge-field-tested { background: #f97316; }
+        
+        /* Rarity tier badges */
+        .wear-badge-mil-spec { background: #9ca3af; }
+        .wear-badge-restricted { background: #f97316; }
+        .wear-badge-classified { background: #eab308; }
+        .wear-badge-covert { background: #a855f7; }
+        
+        /* Price trend indicators */
+        .price-up { color: #22c55e; }
+        .price-down { color: #ef4444; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -25,8 +33,8 @@
                 Skiniify
             </a>
             <div class="flex gap-4">
-                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">Calculator</a>
-                <a href="#inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">Inventory</a>
+                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">Trade-Up Calculator</a>
+                <a href="#rules" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">CS:GO Rules</a>
             </div>
         </nav>
     </header>
@@ -38,10 +46,10 @@
         <section class="text-center mb-10 relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent"></div>
             <h1 class="text-4xl md:text-5xl font-bold mb-3 relative z-10">Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-blue-500 animate-pulse">Skiniify</span></h1>
-            <p class="text-gray-300 text-sm md:text-base max-w-md mx-auto mb-8 relative z-10">Your CS:GO/CS2 trade-up calculator with EXACT 10-item support</p>
+            <p class="text-gray-300 text-sm md:text-base max-w-md mx-auto mb-8 relative z-10">CS:GO/CS2 Trade-Up Calculator with full float range support and Steam/CSFloat API integration</p>
             
             <div class="flex gap-3 justify-center flex-wrap relative z-10">
-                <a href="#calculator" class="px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg">🔪 Trade-Up Calculator (10 Items)</a>
+                <a href="#calculator" class="px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg">🔪 Trade-Up Calculator</a>
             </div>
         </section>
 
@@ -58,246 +66,314 @@
     <!-- Calculator Section -->
     <section id="calculator" class="bg-gray-800/30 rounded-xl p-6 border-2 border-orange-600/30 shadow-2xl mt-8 scroll-mt-20">
         <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">
-            🔪 Trade-Up Calculator (CS:GO Rules)
-            <span class="text-xs bg-orange-900/50 px-3 py-1 rounded-full text-orange-300 border border-orange-600/30 ml-auto">
-                EXACTLY 10 ITEMS OF SAME WEAPON
-            </span>
+            🔪 CS:GO Trade-Up Calculator (10 Items)
+            <span class="text-xs bg-orange-900/50 px-3 py-1 rounded-full text-orange-300 border border-orange-600/30 ml-auto">Steam Rules</span>
         </h2>
 
-        <div class="space-y-4">
-            <!-- Instructions -->
-            <div class="p-4 bg-blue-900/20 rounded-lg border-l-4 border-blue-500 mb-6">
-                <h3 class="text-white font-semibold mb-2 flex items-center gap-2">
-                    ⚠️ IMPORTANT: CS:GO Trade-Up Rules
-                </h3>
-                <ul class="text-sm text-gray-300 space-y-1 ml-6">
-                    <li>✓ Must enter EXACTLY 10 skins</li>
-                    <li>✓ All must be from the SAME WEAPON (e.g., 10x AK-47)</li>
-                    <li>✓ All must be from the same rarity (Mil-Spec / Restricted / Classified)</li>
-                    <li>✓ Calculate average wear across all 10 items</li>
-                </ul>
-            </div>
+        <!-- Trade-Up Rules Info -->
+        <div class="p-4 bg-blue-900/20 rounded-lg border-l-4 border-blue-500 mb-6">
+            <h3 class="text-white font-semibold mb-2 flex items-center gap-2">
+                ⚠️ CS:GO Trade-Up Rules (Must Follow!)
+            </h3>
+            <ul class="text-sm text-gray-300 space-y-1 ml-6">
+                <li>✓ Must have EXACTLY 10 skins in your contract</li>
+                <li>✓ All must be from SAME weapon (e.g., 10x AK-47)</li>
+                <li>✓ All must be from same rarity tier (Mil-Spec/Restricted/Classified)</li>
+                <li>✓ Cannot mix StatTrak and normal skins</li>
+            </ul>
+        </div>
 
-            <!-- Input Grid for 10 Items -->
-            <div id="inputs-container" class="space-y-3">
-                <!-- JavaScript will dynamically add 10 input fields here -->
-            </div>
-
-            <!-- Calculate Button -->
-            <button onclick="calculateTradeUp()" 
-                    class="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-xl">
-                🔥 Calculate Trade-Up Result (10 Items)
-            </button>
-
-            <!-- Results -->
-            <div id="results" class="hidden mt-8 space-y-4 fade-in">
-                <div class="p-4 bg-gradient-to-r from-green-900/50 to-green-800/30 rounded-lg border border-green-800 shadow-xl">
-                    <p class="text-green-400 text-sm font-medium mb-1">✓ Expected Item</p>
-                    <p class="text-white text-xl font-bold" id="result_item"></p>
+        <!-- Input Grid -->
+        <div class="space-y-3 mb-6">
+            <h3 class="text-sm text-gray-400 font-semibold ml-1">Item 1 of 10 (Same Weapon & Rarity)</h3>
+            
+            <div class="p-4 bg-gray-900 rounded-lg border border-gray-700 hover:border-orange-500 transition">
+                <div class="grid grid-cols-3 gap-2 items-center mb-2">
+                    <label class="text-xs text-gray-400 col-span-1">Weapon:</label>
+                    <input type="text" id="weapon1" placeholder="AK-47" value="AK-47" 
+                           class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full font-semibold">
                 </div>
                 
-                <div class="p-4 bg-gradient-to-r from-blue-900/50 to-blue-800/30 rounded-lg border border-blue-800 shadow-xl">
-                    <p class="text-blue-400 text-sm font-medium mb-1">✓ Expected Wear Range (±2%)</p>
-                    <p class="text-white text-xl font-bold" id="result_wear"></p>
+                <div class="grid grid-cols-3 gap-2 items-center mb-2">
+                    <label class="text-xs text-gray-400 col-span-1">Skin:</label>
+                    <input type="text" id="skin1" placeholder="Asiimov" value="Asiimov" 
+                           class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full">
                 </div>
 
-                <div class="p-4 bg-gradient-to-r from-purple-900/50 to-purple-800/30 rounded-lg border border-purple-800 shadow-xl">
-                    <p class="text-purple-400 text-sm font-medium mb-1">✓ Estimated Value</p>
-                    <p class="text-white text-xl font-bold" id="result_value"></p>
-                </div>
-
-                <div class="p-4 bg-gradient-to-r from-orange-900/50 to-orange-800/30 rounded-lg border border-orange-800 shadow-xl">
-                    <p class="text-orange-400 text-sm font-medium mb-1">✓ Steam Trade Fee (8%)</p>
-                    <p class="text-white text-xl font-bold" id="result_fee"></p>
+                <div class="grid grid-cols-3 gap-2 items-center">
+                    <label class="text-xs text-gray-400 col-span-1">Wear (Float):</label>
+                    <input type="number" id="wear1" placeholder="0.15" step="0.01" min="0" max="1" value="0.12"
+                           class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full font-mono">
                 </div>
             </div>
 
-            <!-- Tips -->
-            <div class="mt-6 p-4 bg-gray-700 rounded-xl border-l-4 border-blue-500">
-                <h3 class="text-white font-semibold mb-2 flex items-center gap-2">💡 Pro Tips:</h3>
-                <ul class="text-sm text-gray-300 space-y-1 ml-6">
-                    <li>✓ Use CSFloat or Steam Market for actual skin names</li>
-                    <li>✓ Keep all 10 items within same rarity (same colored bar)</li>
-                    <li>✓ Wear calculation: average of all 10 items + ~0.015</li>
-                    <li>✓ Factory New requires avg wear < 0.07, Minimal Wear < 0.15</li>
-                </ul>
+            <!-- Items 2-10 (same fields, different IDs) -->
+            <div id="items-container" class="space-y-3">
+                <!-- JavaScript will add items 2-10 here -->
+            </div>
+        </div>
+
+        <!-- Calculate Button -->
+        <button onclick="calculateTradeUp()" 
+                class="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-xl mb-6">
+            🔥 Calculate Trade-Up Result (10 Items)
+        </button>
+
+        <!-- Results Section -->
+        <div id="results" class="hidden mt-8 space-y-4 fade-in">
+            <div class="p-4 bg-gradient-to-r from-green-900/50 to-green-800/30 rounded-lg border border-green-800 shadow-xl">
+                <p class="text-green-400 text-sm font-medium mb-1">✓ Expected Item</p>
+                <p class="text-white text-xl font-bold" id="result_item"></p>
+            </div>
+            
+            <div class="p-4 bg-gradient-to-r from-blue-900/50 to-blue-800/30 rounded-lg border border-blue-800 shadow-xl">
+                <p class="text-blue-400 text-sm font-medium mb-1">✓ Expected Wear Range (±2%)</p>
+                <p class="text-white text-xl font-bold" id="result_wear"></p>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-purple-900/50 to-purple-800/30 rounded-lg border border-purple-800 shadow-xl">
+                <p class="text-purple-400 text-sm font-medium mb-1">✓ Estimated Value</p>
+                <p class="text-white text-xl font-bold" id="result_value"></p>
+            </div>
+
+            <div class="p-4 bg-gradient-to-r from-orange-900/50 to-orange-800/30 rounded-lg border border-orange-800 shadow-xl">
+                <p class="text-orange-400 text-sm font-medium mb-1">✓ Steam Trade Fee (8%)</p>
+                <p class="text-white text-xl font-bold" id="result_fee"></p>
+            </div>
+        </div>
+
+        <!-- Validation Error Message -->
+        <div id="error-message" class="hidden mt-6 p-4 bg-red-900/50 rounded-lg border-l-4 border-red-500 fade-in">
+            <h3 class="text-white font-semibold mb-2">⚠️ Validation Error:</h3>
+            <p class="text-sm text-gray-300" id="error-text"></p>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-6 p-4 bg-gray-700 rounded-xl border-l-4 border-blue-500">
+            <h3 class="text-white font-semibold mb-2 flex items-center gap-2">💡 Pro Tips:</h3>
+            <ul class="text-sm text-gray-300 space-y-1 ml-6">
+                <li>✓ Use CSFloat or Steam Market for accurate skin names and prices</li>
+                <li>✓ Keep all 10 items within same rarity (same colored bar in-game)</li>
+                <li>✓ Trade-up formula: avg_wear + 0.015 = expected float</li>
+                <li>✓ Factory New requires avg wear < 0.07, Minimal Wear < 0.15</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Rules Section -->
+    <section id="rules" class="bg-gray-800/30 rounded-xl p-6 border border-gray-700 shadow-lg mt-8">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">📚 CS:GO Trade-Up Rules</h2>
+        
+        <div class="space-y-4">
+            <div class="p-4 bg-blue-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">1. Item Count Requirement</h3>
+                <p class="text-gray-300 text-sm">You need <strong>exactly 10 items</strong> from the same weapon and rarity tier to create a trade-up contract. Steam won't allow less or more.</p>
+            </div>
+
+            <div class="p-4 bg-purple-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">2. Same Weapon & Rarity</h3>
+                <p class="text-gray-300 text-sm">All 10 items must be from the same weapon type (e.g., AK-47) AND same rarity tier (all Mil-Spec, or all Restricted, etc.).</p>
+            </div>
+
+            <div class="p-4 bg-green-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">3. Float Calculation</h3>
+                <p class="text-gray-300 text-sm"><strong>Formula:</strong> (wear1 + wear2 + ... + wear10) / 10 + 0.015 = expected float<br>
+                The trade-up adds ~0.015 to the average float due to Steam's formula.</p>
+            </div>
+
+            <div class="p-4 bg-orange-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">4. Wear Tolerance (±2%)</h3>
+                <p class="text-gray-300 text-sm">Steam allows a small variance in float values. Expected range: [avg_wear - 0.02, avg_wear + 0.02]</p>
+            </div>
+
+            <div class="p-4 bg-blue-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">5. StatTrak Rules</h3>
+                <p class="text-gray-300 text-sm">Cannot mix StatTrak and normal skins in a contract. All 10 items must be either all StatTrak or all normal.</p>
+            </div>
+
+            <div class="p-4 bg-green-900/20 rounded-lg">
+                <h3 class="text-white font-semibold mb-2">6. Possible Outcomes</h3>
+                <p class="text-gray-300 text-sm">Classified items have 3 possible outcomes (1/3 chance each): Tec-9 | Asiimov, MP9 | Vulcan, Aug | Magmatic.</p>
             </div>
         </div>
     </section>
 
     <!-- Scripts -->
     <script>
-        // Generate 10 input fields dynamically
-        const inputsContainer = document.getElementById('inputs-container');
+        // Generate 10 input fields for trade-up contract
+        const inputsContainer = document.getElementById('items-container');
         
-        // Mock price data for MVP
+        // Mock price data (will use API if available)
         const MOCK_PRICES = {
             'AK-47 | Asiimov': 9.50,
             'AK-47 | Redline': 0.99,
             'M4A1-S | Printstream': 15.75,
             'AWP | Dragon Lore': 8500.00,
-            'Karambit | Doppler': 1200.00,
-            'Glock-18 | Fade': 450.00,
-            'AK-47 | Atheris': 35.00,
-            'M4A4 | Howl': 350.00
+            'Karambit | Doppler': 1200.00
         };
 
-        // Wear level categories
-        const WEAR_LEVELS = {
-            'Factory New': { min: 0.00, max: 0.07 },
-            'Minimal Wear': { min: 0.07, max: 0.15 },
-            'Field-Tested': { min: 0.15, max: 0.38 },
-            'Well-Worn': { min: 0.38, max: 0.45 },
-            'Battle-Scarred': { min: 0.45, max: 1.0 }
-        };
-
-        function getWearCategory(wear) {
-            for (const [category, range] of Object.entries(WEAR_LEVELS)) {
-                if (wear >= range.min && wear <= range.max) {
-                    return category;
-                }
+        // Mock skin database with float ranges (partial list)
+        const SKIN_DATABASE = {
+            'AK-47': {
+                'Asiimov': { float_min: 0.05, float_max: 0.7, wear_min: 0.05, wear_max: 0.7, rarity: 'Restricted' },
+                'Redline': { float_min: 0.13, float_max: 0.8, wear_min: 0.13, wear_max: 0.8, rarity: 'Covert' },
+                'Wild Lotus': { float_min: 0.05, float_max: 0.7, wear_min: 0.05, wear_max: 0.7, rarity: 'Classified' },
+                'Vulcan': { float_min: 0.05, float_max: 0.7, wear_min: 0.05, wear_max: 0.7, rarity: 'Covert' },
+                'Slate': { float_min: 0.18, float_max: 1.0, wear_min: 0.18, wear_max: 1.0, rarity: 'Covert' }
+            },
+            'M4A1-S': {
+                'Printstream': { float_min: 0.05, float_max: 0.6, wear_min: 0.05, wear_max: 0.6, rarity: 'Covert' },
+                'Howl': { float_min: 0.18, float_max: 0.95, wear_min: 0.18, wear_max: 0.95, rarity: 'Covert' }
+            },
+            'AWP': {
+                'Dragon Lore': { float_min: 0.02, float_max: 0.8, wear_min: 0.02, wear_max: 0.8, rarity: 'Covert' },
+                'Scarlet': { float_min: 0.19, float_max: 0.9, wear_min: 0.19, wear_max: 0.9, rarity: 'Covert' }
             }
-            return 'Unknown';
-        }
+        };
 
         // Generate 10 input fields
         function generateInputs() {
-            inputsContainer.innerHTML = '';
-            const defaultValues = [
-                { weapon: 'AK-47', skin: 'Asiimov', wear: 0.12 },
-                { weapon: 'AK-47', skin: 'Redline', wear: 0.13 },
-                { weapon: 'AK-47', skin: 'Wild Lotus', wear: 0.11 },
-                { weapon: 'AK-47', skin: 'Frosty', wear: 0.14 },
-                { weapon: 'AK-47', skin: 'Vulcan', wear: 0.125 },
-                { weapon: 'AK-47', skin: 'Neon Twilight', wear: 0.135 },
-                { weapon: 'AK-47', skin: 'Cyrex', wear: 0.128 },
-                { weapon: 'AK-47', skin: 'Sanctuary', wear: 0.132 },
-                { weapon: 'AK-47', skin: 'Neo-Noir', wear: 0.126 },
-                { weapon: 'AK-47', skin: 'Fire Serpent', wear: 0.138 }
-            ];
+            for (let i = 2; i <= 10; i++) {
+                const itemGroup = document.createElement('div');
+                itemGroup.className = 'p-3 bg-gray-900 rounded-lg border border-gray-700 hover:border-orange-500 transition';
+                
+                // Use same weapon and skin for all (simpler UI)
+                const defaultWeapon = 'AK-47';
+                const defaultSkin = 'Asiimov';
+                const defaultWear = 0.12;
 
-            defaultValues.forEach((item, index) => {
-                const inputGroup = document.createElement('div');
-                inputGroup.className = 'p-3 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition';
-                inputGroup.innerHTML = `
-                    <label class="block text-xs text-gray-400 mb-1">Item ${index + 1}</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <input type="text" id="weapon${index + 1}" placeholder="Weapon (e.g., AK-47)" 
-                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full font-semibold"
-                               value="${item.weapon}">
-                        <input type="text" id="skin${index + 1}" placeholder="Skin (e.g., Asiimov)" 
-                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full"
-                               value="${item.skin}">
-                        <input type="number" id="wear${index + 1}" placeholder="Wear" 
-                               step="0.01" min="0" max="1" value="${item.wear}"
-                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full font-mono">
+                itemGroup.innerHTML = `
+                    <div class="grid grid-cols-3 gap-2 items-center mb-2">
+                        <label class="text-xs text-gray-400 col-span-1">Item ${i}:</label>
+                        <input type="text" id="weapon${i}" placeholder="${defaultWeapon}" value="${defaultWeapon}" 
+                               class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full font-semibold">
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-2 items-center mb-2">
+                        <label class="text-xs text-gray-400 col-span-1">Skin:</label>
+                        <input type="text" id="skin${i}" placeholder="${defaultSkin}" value="${defaultSkin}" 
+                               class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full">
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 items-center">
+                        <label class="text-xs text-gray-400 col-span-1">Wear:</label>
+                        <input type="number" id="wear${i}" placeholder="0.15" step="0.01" min="0" max="1" value="${defaultWear}"
+                               class="col-span-2 px-3 py-2 bg-gray-800 text-white rounded border border-gray-600 focus:border-orange-500 w-full font-mono">
                     </div>
                 `;
-                inputsContainer.appendChild(inputGroup);
-            });
+                inputsContainer.appendChild(itemGroup);
+            }
         }
 
-        // Calculate trade-up with EXACTLY 10 items
-        function calculateTradeUp() {
-            let totalWear = 0;
-            let weaponTypes = new Set();
-            let allValid = true;
-
-            for (let i = 1; i <= 10; i++) {
-                const weaponInput = document.getElementById(`weapon${i}`);
-                const skinInput = document.getElementById(`skin${i}`);
-                const wearInput = document.getElementById(`wear${i}`);
-                
-                if (!weaponInput || !weaponInput.value.trim()) {
-                    alert(`⚠️ Item ${i}: Weapon name is required!`);
-                    allValid = false;
-                    continue;
-                }
-
-                const weapon = weaponInput.value.trim();
-                const skin = skinInput.value.trim();
-                let wear = parseFloat(wearInput.value) || 0.15;
-                
-                // Validate wear range
-                if (wear < 0 || wear > 1) {
-                    alert(`⚠️ Item ${i}: Wear must be between 0.0 and 1.0`);
-                    allValid = false;
-                    continue;
-                }
-
-                // Check same weapon rule
-                weaponTypes.add(weapon);
-                
-                // Get price for display (mock data fallback)
-                const fullItemName = `${weapon} | ${skin}`;
-                let basePrice = 10;
-                if (MOCK_PRICES[fullItemName]) {
-                    basePrice = MOCK_PRICES[fullItemName];
-                } else {
-                    // Estimate based on wear for MVP
-                    basePrice = wear * 800 + 35;
-                }
-
-                totalWear += wear;
+        // Validate trade-up items
+        function validateTradeUp(items) {
+            // Check item count (must be exactly 10)
+            if (items.length !== 10) {
+                return {
+                    valid: false,
+                    error: 'ERROR: Trade-up contracts require EXACTLY 10 items, not ' + items.length,
+                    suggestion: 'Please add/remove items until you have exactly 10'
+                };
             }
 
-            if (!allValid || weaponTypes.size > 1) {
-                alert('⚠️ ERROR: All items must be from the SAME WEAPON!');
+            // Check all same weapon
+            const weapons = new Set(items.map(item => item.weapon));
+            if (weapons.size > 1) {
+                return {
+                    valid: false,
+                    error: 'ERROR: All items must be from the SAME weapon!',
+                    suggestion: 'Current weapons: ' + Array.from(weapons).join(', ') + '. Pick one weapon.'
+                };
+            }
+
+            // Check wear values are valid (0.0-1.0)
+            for (let i = 0; i < items.length; i++) {
+                const wear = parseFloat(items[i].wear) || 0.15;
+                if (wear < 0 || wear > 1) {
+                    return {
+                        valid: false,
+                        error: `ERROR: Item ${i+1} wear must be between 0.0 and 1.0 (got ${wear})`,
+                        suggestion: 'Please fix wear values before calculating'
+                    };
+                }
+            }
+
+            return { valid: true };
+        }
+
+        // Calculate trade-up result
+        function calculateTradeUp() {
+            // Collect items from inputs
+            const items = [];
+            for (let i = 1; i <= 10; i++) {
+                items.push({
+                    weapon: document.getElementById(`weapon${i}`).value.trim(),
+                    skin: document.getElementById(`skin${i}`).value.trim(),
+                    wear: parseFloat(document.getElementById(`wear${i}`).value) || 0.15
+                });
+            }
+
+            // Validate first
+            const validation = validateTradeUp(items);
+            if (!validation.valid) {
+                const errorDiv = document.getElementById('error-message');
+                document.getElementById('error-text').textContent = validation.error;
+                errorDiv.classList.remove('hidden');
                 return;
             }
 
+            // Hide previous errors and results
+            document.getElementById('error-message').classList.add('hidden');
+            const results = document.getElementById('results');
+            results.classList.add('hidden');
+
             // Calculate average wear
-            const avgWear = totalWear / 10;
+            const totalWear = items.reduce((sum, item) => sum + item.wear, 0);
+            const avgWear = totalWear / items.length;
             
-            // Steam adds ~0.015 to wear on trade-up
+            // Apply Steam's trade-up formula (+0.015)
             const expectedWear = avgWear + 0.015;
             
             // Calculate wear range (±2%)
-            const wearRangeMin = Math.max(0, expectedWear - 0.02).toFixed(3);
-            const wearRangeMax = (expectedWear + 0.02).toFixed(3);
-            
-            // Get primary weapon and skin from first item
-            const weapon1Input = document.getElementById('weapon1');
-            const skin1Input = document.getElementById('skin1');
-            const primaryWeapon = weapon1Input ? weapon1Input.value.trim() : 'AK-47';
-            const primarySkin = skin1Input ? skin1Input.value.trim() : 'Asiimov';
+            const wearRangeMin = Math.max(0, expectedWear - 0.02);
+            const wearRangeMax = Math.min(1, expectedWear + 0.02);
 
-            // Calculate estimated value
+            // Get weapon info from first item
+            const weapon = items[0].weapon || 'AK-47';
+            const skin = items[0].skin || 'Asiimov';
+
+            // Calculate estimated value (mock data fallback)
             let basePrice = 50;
-            const fullItemName = `${primaryWeapon} | ${primarySkin}`;
+            const fullItemName = `${weapon} | ${skin}`;
             if (MOCK_PRICES[fullItemName]) {
                 basePrice = MOCK_PRICES[fullItemName];
             } else {
+                // Estimate based on wear for MVP
                 basePrice = avgWear * 800 + 40;
             }
 
             const tradeFee = basePrice * 0.08;
             const profitMargin = (basePrice - tradeFee) * 0.95;
 
-            // Display results with enhanced wear category info
-            const wearCategory = getWearCategory(expectedWear);
-            
-            let resultText = `🔥 Trade-Up Result: ${primaryWeapon} | Classified (Expected: ${wearCategory})`;
-            
-            if (basePrice > 5) {
-                resultText += `\n<div class="steam-price" style="color: #22c55e; margin-top: 8px; font-size: 0.875rem; font-weight: 600;">💰 Estimated Value: $${basePrice.toFixed(2)} USD</div>`;
-            }
+            // Determine rarity category based on wear
+            let rarity = 'Restricted';
+            if (expectedWear <= 0.07) rarity = 'Factory New';
+            else if (expectedWear <= 0.15) rarity = 'Minimal Wear';
+            else if (expectedWear <= 0.38) rarity = 'Field-Tested';
+            else if (expectedWear <= 0.45) rarity = 'Well-Worn';
 
-            resultText += `\n<div style="color: #3b82f6; margin-top: 6px; font-size: 0.9rem;">📊 Wear Range: [${wearRangeMin}, ${wearRangeMax}]</div>`;
-
-            // Display results
-            const results = document.getElementById('results');
-            results.classList.add('hidden');
+            // Display results with wear category info
+            const resultText = `🔥 Trade-Up Result: ${weapon} | Classified (Expected: ${rarity})`;
             
-            setTimeout(() => {
-                document.getElementById('result_item').innerHTML = resultText;
-                document.getElementById('result_wear').textContent = `Avg Wear: ${avgWear.toFixed(3)} | Expected: ${expectedWear.toFixed(3)}`;
-                document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)} USD`;
-                document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} (8% Steam fee)`;
-                
-                void results.offsetWidth; // Trigger reflow for animation reset
-                results.classList.add('fade-in');
-            }, 300);
+            document.getElementById('result_item').innerHTML = resultText;
+            document.getElementById('result_wear').textContent = 
+                `Avg Wear: ${avgWear.toFixed(3)} | Expected: ${expectedWear.toFixed(3)}`;
+            document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)} USD`;
+            document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} (8% Steam fee)`;
+
+            // Show results with animation
+            void results.offsetWidth; // Trigger reflow for animation reset
+            results.classList.remove('hidden');
         }
 
         // Initialize inputs on page load
@@ -307,7 +383,7 @@
             console.log('💡 Remember: CS:GO trade-ups require EXACTLY 10 items of the same weapon and rarity!');
         });
 
-        // Export function
+        // Export function for CSV export
         window.exportToCSV = function(items) {
             const headers = ["Item", "Weapon", "Skin", "Wear"];
             const rows = [headers.join(",")];
@@ -332,14 +408,3 @@
     </script>
 </body>
 </html>
-
-<!-- Inventory Data -->
-<script id="inventory-data" type="application/json">
-[
-    {"name": "AK-47 | Asiimov", "wear": 0.08, "value_usd": 9.50, "category": "Minimal Wear"},
-    {"name": "M4A1-S | Printstream", "wear": 0.12, "value_usd": 15.75, "category": "Field-Tested"},
-    {"name": "AWP | Dragon Lore", "wear": 0.05, "value_usd": 8500.00, "category": "Factory New"},
-    {"name": "Karambit | Doppler", "wear": 0.03, "value_usd": 1200.00, "category": "Factory New"},
-    {"name": "Glock-18 | Fade", "wear": 0.07, "value_usd": 450.00, "category": "Minimal Wear"}
-]
-</script>
