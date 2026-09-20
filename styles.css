@@ -1,0 +1,27 @@
+/* ==========================================\n   WEAPON IMAGES & ICONS\n   ========================================== */
+.inline-weapon-icon {
+  border-radius: 50%;
+  border: 2px solid #4b5563;
+  transition: all 0.3s ease;
+}
+.inline-weapon-icon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.preloaded-weapon-icon {
+  position: fixed;
+  top: 0;
+  left: -9999px;
+}
+
+/* ==========================================\n   ANIMATIONS\n   ========================================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease-out; }
+
+/* ==========================================\n   FOOTER\n   ========================================== */
+footer { background-color: #1e1e1e; border-top: 1px solid #333333; padding: 1.5rem 0; }
