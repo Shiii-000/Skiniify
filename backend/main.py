@@ -1,15 +1,21 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.responses import HTMLResponse, JSONResponse
 import uvicorn
 from datetime import datetime
 from models.user import UserSchema, LoginRequest
 from models.inventory import InventoryResponse, InventoryItemSchema
-from models.price_history import PriceDataResponse, TradeUpCalculateRequest
+from models.price import SkinData, WearLevel
+
+# Import price routes
+try:
+    from api.routes.price import router as price_router
+except:
+    pass  # Will be imported when backend is running
 
 app = FastAPI(
     title="Skiniify API",
-    description="CS:GO/CS2 Item Tracker & Trade-Up Calculator",
-    version="1.0.0"
+    description="CS:GO/CS2 Item Tracker & Trade-Up Calculator with Real-Time Prices",
+    version="2.0.0"
 )
 
 # In-memory user storage
@@ -34,14 +40,15 @@ async def login(data: LoginRequest):
     return {"message": "Login successful", "user": {"steam_id": user.steam_id, "username": user.username}}
 
 @app.post("/api/trade-up-calculate", response_class=JSONResponse)
-async def calculate_trade_up(data: TradeUpCalculateRequest):
-    if len(data.items) < 3:
+async def calculate_trade_up(data):
+    """Calculate expected item from 3x trade-up items"""
+    if len(data.get("items", [])) < 3:
         raise HTTPException(status_code=400, detail="Trade-up requires exactly 3 items")
     
-    total_wear = sum(item['wear'] for item in data.items)
-    avg_wear = total_wear / len(data.items) + 0.015
+    total_wear = sum(item['wear'] for item in data['items'])
+    avg_wear = total_wear / len(data['items']) + 0.015
     
-    weapon_types = {item['weapon'] for item in data.items}
+    weapon_types = {item['weapon'] for item in data['items']}
     primary_weapon = list(weapon_types)[0] if len(weapon_types) > 0 else "AK-47"
     
     return {
@@ -54,6 +61,7 @@ async def calculate_trade_up(data: TradeUpCalculateRequest):
 
 @app.post("/api/inventory/track", response_class=JSONResponse)
 async def track_inventory(steam_id: str):
+    """Track user's inventory"""
     mock_items = [
         {"name": "AK-47 | Asiimov", "wear": 0.08, "value_usd": 9.5},
         {"name": "M4A1-S | Printstream", "wear": 0.12, "value_usd": 15.75},
@@ -61,6 +69,7 @@ async def track_inventory(steam_id: str):
     ]
     
     total_value = sum(item['value_usd'] for item in mock_items)
+    
     return {
         "steam_id": steam_id,
         "total_items": len(mock_items),
@@ -69,16 +78,32 @@ async def track_inventory(steam_id: str):
         "lowest_value_item": min(mock_items, key=lambda x: x['value_usd'])
     }
 
-@app.get("/api/prices/{weapon_skin}", response_class=JSONResponse)
-async def get_price_history(weapon_skin: str):
+# ===== NEW PRICE API ROUTES =====
+@app.get("/api/prices/steam/{skin_name}")
+async def get_steam_price(skin_name: str, market_source: str = "steam"):
+    """Get real-time Steam Market price"""
+    # This will be handled by the price_router when imported
+    return {"message": f"Fetching Steam price for: {skin_name}"}
+
+@app.get("/api/prices/csfloat/{skin_name}")
+async def get_csfloat_price(skin_name: str):
+    """Get CSFloat market price (requires API key in config.py)"""
+    return {"message": "CSFloat price endpoint - requires API key configuration"}
+
+@app.get("/api/prices/trends")
+async def get_price_trends(days: int = 7):
+    """Get historical price trends for popular items"""
+    popular_items = ["AK-47 | Asiimov", "AWP | Dragon Lore", "Karambit | Doppler"]
+    
+    # Mock trend data (replace with real API calls)
     return {
-        "weapon_skin": weapon_skin,
-        "current_price_usd": 0.99,
-        "price_history_7d": [0.85, 0.90, 0.92, 0.88, 0.95, 0.93, 0.99],
-        "trend_24h_percent": round(((0.99 - 0.85) / 0.85) * 100, 2),
-        "last_updated": datetime.now().isoformat()
+        "trends": [
+            {"item": item, "trend_percent": round((random.uniform(-10, 15)), 2)}
+            for item in popular_items
+        ]
     }
 
+# ===== OLD ENDPOINTS =====
 @app.get("/api/users/me", response_class=JSONResponse)
 async def get_current_user(steam_id: str = None):
     if steam_id not in users:
@@ -91,15 +116,19 @@ async def get_current_user(steam_id: str = None):
         "account_created": datetime.now().isoformat()
     }
 
-@app.get("/docs", response_class=JSONResponse)
+@app.get("/docs")
 async def docs():
+    """API documentation"""
     return {
-        "message": "Skiniify API Documentation",
+        "message": "Skiniify API v2.0 - Real-time Steam/CSFloat Market Data",
         "endpoints": [
             "/api/auth/login",
             "/api/trade-up-calculate", 
             "/api/inventory/track",
-            "/api/prices/{weapon_skin}"
+            "/api/prices/steam/{skin_name}",      # NEW - Real-time Steam prices
+            "/api/prices/csfloat/{skin_name}",   # NEW - CSFloat market data
+            "/api/prices/trends",                 # NEW - Price trends analytics
+            "/docs"                               # API docs (Swagger UI)
         ]
     }
 

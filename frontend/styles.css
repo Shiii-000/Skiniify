@@ -1,183 +1,21 @@
-/* 🎨 Skiniify - Modern Clean Styles */
-
-/* ==========================================
-   BASE STYLES
-   ========================================== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
-  line-height: 1.5;
-}
-
-/* ==========================================
-   TYPOGRAPHY
-   ========================================== */
-h1 { font-size: 2rem; font-weight: 700; }
-h2 { font-size: 1.5rem; font-weight: 600; }
-p { color: #a3a3a3; margin-bottom: 1rem; }
-
-/* ==========================================
-   LAYOUT UTILITIES
-   ========================================== */
-.max-w-xl { max-width: 42rem; }
-.mx-auto { margin-left: auto; margin-right: auto; }
-.text-center { text-align: center; }
-
-/* ==========================================
-   COMPONENT STYLES
-   ========================================== */
-
-/* Header */
-header {
-  background-color: #1e1e1e99;
-  backdrop-filter: blur(8px);
-}
-
-nav a {
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-
-/* Hero Section */
-.hero h1 span { color: #f97316; }
-
-.hero p { max-width: 32rem; margin: 0 auto 1.5rem; }
-
-.hero a { text-decoration: none; }
-
-/* ==========================================
-   CARDS & CONTAINERS
-   ========================================== */
-.card,
-.calc-form,
-.total-value-card,
-.inventory-table {
-  background-color: #1e1e1e;
-  border-radius: 12px;
-  border: 1px solid #333333;
-}
-
-.card:hover,
-.calc-form,
-.inventory-table {
-  transition: all 0.3s ease;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-}
-
-/* ==========================================
-   FORM ELEMENTS
-   ========================================== */
-input[type="text"],
-input[type="number"] {
-  background-color: #2a2a2a;
-  border: 1px solid #444444;
-  color: #ffffff;
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-size: 0.9375rem;
-  transition: all 0.2s ease;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus {
-  border-color: #f97316;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
-}
-
-input::placeholder { color: #666666; }
-
-/* ==========================================
-   BUTTONS
-   ========================================== */
-button,
-a.btn {
-  display: inline-block;
-  font-weight: 600;
-  text-align: center;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none !important;
-  border: none !important;
-}
-
-button:hover,
-a.btn:hover { transform: translateY(-1px); }
-button:active,
-a.btn:active { transform: translateY(0); }
-
-/* Primary buttons */
-.bg-orange-600:hover { background-color: #ea580c; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3); }
-.bg-blue-600:hover { background-color: #2563eb; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
-
-/* ==========================================
-   RESULTS CARDS
-   ========================================== */
-.result-card {
-  background-color: rgba(30, 30, 30, 0.8);
-  border-radius: 12px;
-  padding: 1.25rem;
-  border-left-width: 4px;
+/* ==========================================\n   WEAPON IMAGES & ICONS\n   ========================================== */
+.inline-weapon-icon {
+  border-radius: 50%;
+  border: 2px solid #4b5563;
   transition: all 0.3s ease;
 }
-
-.result-card:hover { transform: translateX(5px); }
-/* Success (green) */
-.success { border-left-color: #22c55e; }
-/* Info (blue) */
-.info { border-left-color: #3b82f6; }
-/* Warning (yellow) */
-.warning { border-left-color: #fbbf24; }
-/* Danger (red) */
-.danger { border-left-color: #ef4444; }
-
-.result-label {
-  font-size: 0.875rem;
-  color: #a3a3a3;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  margin-bottom: 0.25rem;
+.inline-weapon-icon:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 
-.result-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #ffffff;
+.preloaded-weapon-icon {
+  position: fixed;
+  top: 0;
+  left: -9999px;
 }
 
-/* ==========================================
-   TABLE STYLES
-   ========================================== */
-table { width: 100%; border-collapse: collapse; }
-th { font-weight: 600; color: #a3a3a3; text-align: left; padding: 1rem; }
-td { padding: 1rem; border-bottom: 1px solid #333333; }
-tr.table-row:hover td { background-color: #242424; }
-
-.item-cell .item-name { font-weight: 500; color: #ffffff; display: flex; gap: 0.75rem; align-items: center; }
-.wear-info { font-size: 0.875rem; color: #a3a3a3; margin-top: 0.25rem; }
-.text-right { text-align: right !important; }
-
-/* ==========================================
-   WEAR BADGES
-   ========================================== */
-.wear-badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-/* ==========================================
-   ANIMATIONS
-   ========================================== */
+/* ==========================================\n   ANIMATIONS\n   ========================================== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -185,7 +23,5 @@ tr.table-row:hover td { background-color: #242424; }
 
 .fade-in { animation: fadeIn 0.3s ease-out; }
 
-/* ==========================================
-   FOOTER
-   ========================================== */
+/* ==========================================\n   FOOTER\n   ========================================== */
 footer { background-color: #1e1e1e; border-top: 1px solid #333333; padding: 1.5rem 0; }

@@ -6,6 +6,7 @@
     <title>Skiniify - CS:GO/CS2 Item Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
+    <script src="skin-images.js"></script>
     <style>
         /* Custom animations */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
@@ -86,5 +87,28 @@
     <!-- Scripts -->
     <script src="calculator.js"></script>
     <script src="inventory.js"></script>
+    
+    <!-- Image loading on page load -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pre-load common weapon icons
+            const weapons = ['AK-47', 'M4A1-S', 'AWP', 'M4A4', 'Glock'];
+            
+            weapons.forEach(async (weapon) => {
+                try {
+                    const imageUrl = window.SkiniifyImages.getWeaponImageUrl(weapon);
+                    if (imageUrl) {
+                        const img = document.createElement('img');
+                        img.src = `http://localhost:8000${imageUrl}`;
+                        img.style.opacity = '0';
+                        img.className = 'preloaded-weapon-icon';
+                        document.body.appendChild(img);
+                    }
+                } catch(e) {
+                    console.log('Pre-load failed for:', weapon, e);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
