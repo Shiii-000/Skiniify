@@ -3,21 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skiniify - CS:GO Item Tracker</title>
+    <title>Skiniify - CS:GO/CS2 Item Tracker 🎮</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Custom Animations -->
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Wear badge styles */
+        .wear-badge {
+            transition: all 0.3s ease;
+        }
+        
+        .wear-badge:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+        
+        /* Input focus animations */
+        input:focus {
+            transform: scale(1.02);
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 font-sans">
     
     <!-- Header -->
-    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50 shadow-lg">
         <nav class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-white hover:text-orange-500 transition">
-                Skiniify 🔪
+            <a href="/" class="text-2xl font-bold text-white hover:text-orange-500 transition flex items-center gap-2">
+                <span class="text-3xl">🔪</span>
+                Skiniify
             </a>
             <div class="flex gap-4">
-                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition">Calculator</a>
-                <a href="#inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition">Inventory</a>
+                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition hover:bg-gray-700">Calculator</a>
+                <a href="#inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition hover:bg-gray-700">Inventory</a>
             </div>
         </nav>
     </header>
@@ -27,164 +78,189 @@
         
         <!-- Hero Section -->
         <section class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-white mb-4">Welcome to <span class="text-orange-500">Skiniify</span></h1>
-            <p class="text-xl text-gray-300 mb-8">The ultimate CS:GO/CS2 item tracker for trade-ups, inventory management, and market insights.</p>
+            <h1 class="text-5xl font-bold text-white mb-4">Welcome to <span class="text-orange-500 animate-pulse-custom">Skiniify</span></h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">The ultimate CS:GO/CS2 item tracker for trade-ups, inventory management, and market insights.</p>
             
-            <div class="flex gap-4 justify-center mb-8">
-                <a href="#calculator" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition">Trade-Up Calculator</a>
-                <a href="#inventory" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">Inventory Manager</a>
+            <div class="flex gap-4 justify-center mb-8 flex-wrap">
+                <a href="#calculator" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-orange-500/25">Trade-Up Calculator</a>
+                <a href="#inventory" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-blue-500/25">Inventory Manager</a>
             </div>
         </section>
 
         <!-- Features Grid -->
         <div class="grid md:grid-cols-3 gap-6 mb-12">
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-orange-500 transition">
-                <div class="text-orange-500 text-2xl mb-3">🔪</div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-orange-500 transition transform hover:-translate-y-1 shadow-lg">
+                <div class="text-orange-500 text-3xl mb-3">🔪</div>
                 <h3 class="text-xl text-white font-semibold mb-2">Trade-Up Calculator</h3>
-                <p class="text-gray-400">Calculate expected wear and value when trading up 3 items.</p>
+                <p class="text-gray-400">Calculate expected wear and value when trading up 3 items with real-time wear tolerance.</p>
             </div>
             
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-blue-500 transition">
-                <div class="text-blue-500 text-2xl mb-3">📊</div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-blue-500 transition transform hover:-translate-y-1 shadow-lg">
+                <div class="text-blue-500 text-3xl mb-3">📊</div>
                 <h3 class="text-xl text-white font-semibold mb-2">Market Tracker</h3>
-                <p class="text-gray-400">Real-time price tracking with 7-day history charts.</p>
+                <p class="text-gray-400">Real-time price tracking with 7-day history charts and trend analysis.</p>
             </div>
             
-            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-purple-500 transition">
-                <div class="text-purple-500 text-2xl mb-3">🎒</div>
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:border-purple-500 transition transform hover:-translate-y-1 shadow-lg">
+                <div class="text-purple-500 text-3xl mb-3">🎒</div>
                 <h3 class="text-xl text-white font-semibold mb-2">Inventory Manager</h3>
-                <p class="text-gray-400">Track owned skins, portfolio value, and identify low-value items.</p>
+                <p class="text-gray-400">Track owned skins, portfolio value, and identify low-value items for quick sales.</p>
             </div>
         </div>
 
         <!-- Calculator Section -->
-        <section id="calculator" class="mb-8">
-            <h2 class="text-2xl text-white font-bold mb-4 flex items-center gap-2">
+        <section id="calculator" class="mb-8 scroll-mt-20">
+            <h2 class="text-3xl text-white font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">
                 🔪 Trade-Up Calculator
+                <span class="text-sm font-normal text-gray-400 ml-2">Trade 3 Items → 1 Item</span>
             </h2>
             
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
-                <h3 class="text-lg text-white font-semibold mb-4">Enter Your Items</h3>
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
+                <h3 class="text-lg text-white font-semibold mb-4 flex items-center gap-2">
+                    📝 Enter Your Items
+                    <span class="text-xs bg-gray-700 px-2 py-1 rounded-full text-gray-300">(Must be same weapon type)</span>
+                </h3>
                 
                 <div class="space-y-6">
                     <!-- Item 1 -->
-                    <div class="p-4 bg-gray-700 rounded-lg">
-                        <label class="block text-sm text-gray-400 mb-2">Item 1 (x3 items)</label>
-                        <div class="grid grid-cols-3 gap-2">
+                    <div class="p-4 bg-gradient-to-r from-gray-700 to-gray-750 rounded-lg border-l-4 border-orange-500 shadow-md relative overflow-hidden">
+                        <div class="absolute top-2 right-2 text-xs text-gray-400">Item 1 (x3)</div>
+                        <div class="grid grid-cols-3 gap-2 items-end">
                             <input type="text" id="item1_weapon" placeholder="Weapon (e.g., AK-47)" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full font-semibold"
+                                   value="AK-47">
                             <input type="text" id="item1_skin" placeholder="Skin (e.g., Redline)" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="Redline">
                             <input type="number" id="item1_wear" placeholder="Wear (0.0-1.0)" 
-                                   step="0.01" value="0.15"
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                                   step="0.01" min="0" max="1" value="0.15"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full font-mono"
+                                   title="Wear level: 0.0 = Factory New, 1.0 = Battle-Scarred">
                         </div>
                     </div>
 
                     <!-- Item 2 -->
-                    <div class="p-4 bg-gray-700 rounded-lg">
-                        <label class="block text-sm text-gray-400 mb-2">Item 2</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <input type="text" id="item2_weapon" placeholder="Weapon" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                    <div class="p-4 bg-gradient-to-r from-gray-700 to-gray-750 rounded-lg border-l-4 border-blue-500 shadow-md relative overflow-hidden">
+                        <div class="absolute top-2 right-2 text-xs text-gray-400">Item 2</div>
+                        <div class="grid grid-cols-3 gap-2 items-end">
+                            <input type="text" id="item2_weapon" placeholder="Weapon (same as Item 1)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full font-semibold"
+                                   value="AK-47">
                             <input type="text" id="item2_skin" placeholder="Skin" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
-                            <input type="number" id="item2_wear" placeholder="Wear" 
-                                   step="0.01" value="0.16"
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                                   value="Redline">
+                            <input type="number" id="item2_wear" placeholder="Wear (0.0-1.0)" 
+                                   step="0.01" min="0" max="1" value="0.16"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full font-mono">
                         </div>
                     </div>
 
                     <!-- Item 3 -->
-                    <div class="p-4 bg-gray-700 rounded-lg">
-                        <label class="block text-sm text-gray-400 mb-2">Item 3</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <input type="text" id="item3_weapon" placeholder="Weapon" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                    <div class="p-4 bg-gradient-to-r from-gray-700 to-gray-750 rounded-lg border-l-4 border-purple-500 shadow-md relative overflow-hidden">
+                        <div class="absolute top-2 right-2 text-xs text-gray-400">Item 3</div>
+                        <div class="grid grid-cols-3 gap-2 items-end">
+                            <input type="text" id="item3_weapon" placeholder="Weapon (same as Item 1)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full font-semibold"
+                                   value="AK-47">
                             <input type="text" id="item3_skin" placeholder="Skin" 
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
-                            <input type="number" id="item3_wear" placeholder="Wear" 
-                                   step="0.01" value="0.14"
-                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
+                                   value="Redline">
+                            <input type="number" id="item3_wear" placeholder="Wear (0.0-1.0)" 
+                                   step="0.01" min="0" max="1" value="0.14"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full font-mono">
                         </div>
                     </div>
 
                     <!-- Calculate Button -->
                     <button onclick="calculateTradeUp()" 
-                            class="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition"
-                            id="calculateBtn">
-                        Calculate Trade-Up Result
+                            class="w-full py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-orange-500/30">
+                        🔥 Calculate Trade-Up Result
                     </button>
                 </div>
 
                 <!-- Results -->
                 <div id="results" class="hidden mt-8 space-y-4">
-                    <div class="p-4 bg-green-900/30 rounded-lg border border-green-800">
+                    <div class="p-4 bg-green-900/30 rounded-lg border border-green-800 shadow-lg transform animate-pulse-custom">
                         <p class="text-green-400 text-sm font-medium">✓ Expected Item</p>
-                        <p class="text-white text-lg" id="result_item"></p>
+                        <p class="text-white text-xl font-bold" id="result_item"></p>
                     </div>
                     
-                    <div class="p-4 bg-blue-900/30 rounded-lg border border-blue-800">
-                        <p class="text-blue-400 text-sm font-medium">✓ Expected Wear Range</p>
-                        <p class="text-white text-lg" id="result_wear"></p>
+                    <div class="p-4 bg-blue-900/30 rounded-lg border border-blue-800 shadow-lg transform animate-pulse-custom">
+                        <p class="text-blue-400 text-sm font-medium">✓ Expected Wear Range (±2%)</p>
+                        <p class="text-white text-xl font-bold font-mono" id="result_wear"></p>
                     </div>
 
-                    <div class="p-4 bg-purple-900/30 rounded-lg border border-purple-800">
+                    <div class="p-4 bg-purple-900/30 rounded-lg border border-purple-800 shadow-lg transform animate-pulse-custom">
                         <p class="text-purple-400 text-sm font-medium">✓ Estimated Value</p>
-                        <p class="text-white text-lg" id="result_value"></p>
+                        <p class="text-white text-xl font-bold" id="result_value"></p>
                     </div>
 
-                    <div class="p-4 bg-orange-900/30 rounded-lg border border-orange-800">
+                    <div class="p-4 bg-orange-900/30 rounded-lg border border-orange-800 shadow-lg transform animate-pulse-custom">
                         <p class="text-orange-400 text-sm font-medium">✓ Steam Trade Fee (8%)</p>
-                        <p class="text-white text-lg" id="result_fee"></p>
+                        <p class="text-white text-xl font-bold" id="result_fee"></p>
                     </div>
                 </div>
 
                 <!-- Tips -->
-                <div class="mt-6 p-4 bg-gray-700 rounded-xl">
-                    <h3 class="text-white font-semibold mb-2">💡 Tips:</h3>
-                    <ul class="text-sm text-gray-400 space-y-1">
-                        <li>• Always use the same weapon type for trade-ups</li>
-                        <li>• Wear levels are additive in trade-up calculations</li>
-                        <li>• Steam takes 8% trading fee on market transactions</li>
+                <div class="mt-6 p-4 bg-gray-700 rounded-xl border-l-4 border-blue-500">
+                    <h3 class="text-white font-semibold mb-2 flex items-center gap-2">💡 Pro Tips:</h3>
+                    <ul class="text-sm text-gray-300 space-y-1 ml-6">
+                        <li>✓ Always use the same weapon type for all 3 items</li>
+                        <li>✓ Wear levels are additive in trade-up calculations</li>
+                        <li>✓ Steam takes 8% trading fee on market transactions</li>
+                        <li>✓ Factory New (0.0-0.07) and Minimal Wear (0.07-0.15) are most valuable</li>
                     </ul>
                 </div>
             </div>
         </section>
 
         <!-- Inventory Section -->
-        <section id="inventory" class="mb-8">
-            <h2 class="text-2xl text-white font-bold mb-4 flex items-center gap-2">
+        <section id="inventory" class="mb-8 scroll-mt-20">
+            <h2 class="text-3xl text-white font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">
                 🎒 Inventory Manager
+                <span class="text-sm font-normal text-gray-400 ml-2">Track Your Portfolio</span>
             </h2>
             
-            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
                 <!-- Total Value Card -->
-                <div class="bg-gradient-to-r from-green-900/30 to-green-800/20 rounded-lg p-4 mb-4 border border-green-700">
-                    <h3 class="text-white text-lg font-semibold mb-2">Total Portfolio Value</h3>
-                    <p class="text-4xl text-green-400 font-bold">$<span id="totalValue">8525.25</span></p>
-                    <p class="text-gray-400 mt-2 text-sm">15 items tracked</p>
+                <div class="bg-gradient-to-r from-green-900/30 to-green-800/20 rounded-lg p-4 mb-4 border border-green-700 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-2">
+                        <span class="text-xs bg-green-600 px-2 py-1 rounded-full text-white font-bold animate-pulse-custom">$</span>
+                    </div>
+                    <h3 class="text-white text-lg font-semibold mb-2 flex items-center gap-2">
+                        💎 Total Portfolio Value
+                        <span class="text-sm text-green-400">(15 items tracked)</span>
+                    </h3>
+                    <p class="text-5xl text-green-400 font-bold drop-shadow-lg" id="totalValue">$8,525.25</p>
+                    <p class="text-gray-400 mt-2 text-sm">Real-time tracking with live market updates</p>
                 </div>
 
                 <!-- Items Table -->
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto rounded-lg border border-gray-600">
                     <table class="w-full">
-                        <thead class="bg-gray-700">
+                        <thead class="bg-gray-700 font-semibold text-white">
                             <tr>
-                                <th class="px-4 py-3 text-left text-white font-semibold">Item Name</th>
-                                <th class="px-4 py-3 text-right text-white font-semibold">Value (USD)</th>
+                                <th class="px-4 py-3 text-left">Item Name</th>
+                                <th class="px-4 py-3 text-right">Value (USD)</th>
                             </tr>
                         </thead>
-                        <tbody id="inventoryList" class="divide-y divide-gray-700">
+                        <tbody id="inventoryList" class="divide-y divide-gray-600 bg-gray-800">
                             <!-- Populated by JavaScript -->
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Actions -->
-                <div class="mt-4 flex gap-3">
-                    <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">+ Add Item</button>
-                    <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">Export to CSV</button>
+                <div class="mt-4 flex gap-3 flex-wrap">
+                    <button class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-blue-500/30 flex items-center gap-2">
+                        ➕ Add Item
+                    </button>
+                    <button class="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-purple-500/30 flex items-center gap-2">
+                        📊 View Market Data
+                    </button>
+                    <button class="px-5 py-2.5 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white rounded-lg transition transform hover:scale-105 shadow-lg hover:shadow-gray-500/30 flex items-center gap-2">
+                        📁 Export to CSV
+                    </button>
                 </div>
             </div>
         </section>
@@ -192,10 +268,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 py-8 mt-12 border-t border-gray-700">
+    <footer class="bg-gray-800 py-8 mt-12 border-t border-gray-700 shadow-inner">
         <div class="max-w-4xl mx-auto px-6 text-center text-gray-400">
-            <p>© 2024 Skiniify — Built by Shii-000</p>
-            <p class="mt-2 text-sm">Discord Community Coming Soon!</p>
+            <p>© 2024 Skiniify — Built by <span class="text-orange-500 font-bold">Shii-000</span></p>
+            <p class="mt-2 text-sm">Built with ❤️ for the CS:GO/CS2 community • Discord Community Coming Soon!</p>
         </div>
     </footer>
 
