@@ -1,23 +1,32 @@
-# Python dependencies
+# Python bytecode (generated during execution)
+__pycache__/
+*.pyc
+
+# Virtual environments (don't commit these)
 venv/
 env/
+.venv/
+
+# Environment variables
 .env
+.env.local
 
-# Node.js dependencies
-node_modules/
-frontend/node_modules/
-
-# Build outputs
-dist/
-build/
-.next/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE files
+# IDE/editor settings
 .idea/
 .vscode/
 *.swp
 *.swo
+.project
+.classpath
+.settings/
+
+# Node modules (automatically installed, never commit)
+node_modules/
+.next/
+*.js.map
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
