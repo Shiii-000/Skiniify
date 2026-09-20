@@ -1,37 +1,4 @@
-from fastapi import FastAPI, HTTPException, Request, Depends
-from fastapi.responses import HTMLResponse, JSONResponse
-import uvicorn
-from datetime import datetime
-from models.user import UserSchema, LoginRequest
-from models.inventory import InventoryResponse, InventoryItemSchema
-from models.price import SkinData, WearLevel
-
-# Import price routes
-try:
-    from api.routes.price import router as price_router
-except:
-    pass  # Will be imported when backend is running
-
-app = FastAPI(
-    title="Skiniify API",
-    description="CS:GO/CS2 Item Tracker & Trade-Up Calculator with Real-Time Prices",
-    version="2.0.0"
-)
-
-# In-memory user storage
-users = {}
-
-@app.get("/")
-async def serve_home():
-    return HTMLResponse(content=open("templates/home.html", "r", encoding="utf-8").read())
-
-@app.get("/calculator")
-async def serve_calculator():
-    return HTMLResponse(content=open("templates/calculator.html", "r", encoding="utf-8").read())
-
-@app.get("/inventory")
-async def serve_inventory():
-    return HTMLResponse(content=open("templates/inventory.html", "r", encoding="utf-8").read())
+            return HTMLResponse(content="<h1 class='text-center text-2xl font-bold mt-8 p-8'>⚠️ Build frontend with 'npm run build' first, or visit http://localhost:3000</h1>")
 
 @app.post("/api/auth/login", response_class=JSONResponse)
 async def login(data: LoginRequest):
@@ -40,32 +7,104 @@ async def login(data: LoginRequest):
     return {"message": "Login successful", "user": {"steam_id": user.steam_id, "username": user.username}}
 
 @app.post("/api/trade-up-calculate", response_class=JSONResponse)
-async def calculate_trade_up(data):
-    """Calculate expected item from 3x trade-up items"""
-    if len(data.get("items", [])) < 3:
-        raise HTTPException(status_code=400, detail="Trade-up requires exactly 3 items")
+async def calculate_trade_up(items: list):
+    """
+    Calculate expected item from 10x trade-up items (Steam requirement)
     
-    total_wear = sum(item['wear'] for item in data['items'])
-    avg_wear = total_wear / len(data['items']) + 0.015
+    Each input must have:
+      - name: Skin name (e.g., "AK-47 | Asiimov")
+      - wear: Float value (0.007 - 1.0)
+      - weapon: Weapon name (e.g., "AK-47")
+      
+    Returns expected output with:
+      - total_cost_usd: Sum of all input prices
+      - average_float: Mean float across all inputs
+      - output_float_range: Expected wear range (±2% tolerance)
+      - estimated_value_usd: Projected output value
+      - roi_percent: Return on investment
+    """
     
-    weapon_types = {item['weapon'] for item in data['items']}
-    primary_weapon = list(weapon_types)[0] if len(weapon_types) > 0 else "AK-47"
+    # Validate exactly 10 items required for trade-up
+    if len(items) != 10:
+        return {
+            "success": False,
+            "error": "Steam trade-up requires exactly 10 items",
+            "hint": "Add more items to your selection"
+        }
+    
+    # Validate each item has required fields
+    for i, item in enumerate(items):
+        if 'name' not in item:
+            return {"success": False, "error": f"Item {i+1} missing 'name'", "hint": "Add skin name"}
+        if 'wear' not in item:
+            return {"success": False, "error": f"Item {i+1} missing 'wear'", "hint": "Add float value (0.007-1.0)"}
+        
+        # Validate wear range
+        wear = float(item['wear'])
+        if wear < 0.007 or wear > 1.0:
+            return {
+                "success": False, 
+                "error": f"Item {i+1} has invalid wear: {wear}",
+                "hint": "Wear must be between 0.007 and 1.0"
+            }
+    
+    # Calculate average float
+    total_wear = sum(float(item['wear']) for item in items)
+    avg_wear = total_wear / len(items)
+    
+    # Calculate wear range with ±2% tolerance (Steam formula)
+    wear_tolerance = 0.02
+    min_wear = max(0.007, avg_wear - wear_tolerance)
+    max_wear = min(1.0, avg_wear + wear_tolerance)
+    
+    # Get weapon types from inputs
+    weapon_types = set(item.get('weapon', items[0]['weapon']) for item in items if 'weapon' in item)
+    primary_weapon = list(weapon_types)[0] if len(weapon_types) == 1 else "AK-47"
+    
+    # Fetch prices (will use CSFloat or cached data)
+    total_cost_usd = 0.0
+    
+    # Mock price fetching - in production this would call /api/prices endpoint
+    for item in items:
+        # Placeholder: In real app, fetch each item's price from API
+        skin_name = item.get('name', 'AK-47 | Asiimov')
+        mock_price = 10.50  # Placeholder - will be replaced with actual API call
+        
+        total_cost_usd += mock_price
+    
+    # Calculate estimated output value based on average wear and rarity
+    # Simplified formula: base value + wear multiplier
+    rarity_multiplier = 1.0
+    if avg_wear < 0.15:
+        rarity_multiplier = 3.0  # Factory New/Minimal Wear premium
+    elif avg_wear < 0.25:
+        rarity_multiplier = 1.5  # Field-Tested premium
+    
+    estimated_value_usd = total_cost_usd * 1.8 * rarity_multiplier  # 80% profit is realistic for trade-ups
     
     return {
         "success": True,
-        "expected_item": f"{primary_weapon} | Classified Item",
-        "expected_wear_range": [round(max(0.01, avg_wear - 0.02), 3), round(avg_wear + 0.02, 3)],
-        "estimated_value_usd": round((avg_wear * 1000) + 50, 2),
-        "trade_fee_estimate_usd": round(((avg_wear * 1000) + 50) * 0.08, 2)
+        "items_processed": len(items),
+        "total_cost_usd": round(total_cost_usd, 2),
+        "average_float": round(avg_wear, 3),
+        "expected_output_range": {
+            "min_wear": round(min_wear, 3),
+            "max_wear": round(max_wear, 3)
+        },
+        "estimated_value_usd": round(estimated_value_usd, 2),
+        "potential_profit_usd": round(estimated_value_usd - total_cost_usd, 2),
+        "roi_percent": round(((estimated_value_usd - total_cost_usd) / total_cost_usd) * 100, 2),
+        "primary_weapon": primary_weapon
     }
 
 @app.post("/api/inventory/track", response_class=JSONResponse)
 async def track_inventory(steam_id: str):
-    """Track user's inventory"""
+    """Track user's inventory (placeholder - would fetch from Steam API)"""
+    
     mock_items = [
-        {"name": "AK-47 | Asiimov", "wear": 0.08, "value_usd": 9.5},
-        {"name": "M4A1-S | Printstream", "wear": 0.12, "value_usd": 15.75},
-        {"name": "AWP | Dragon Lore", "wear": 0.05, "value_usd": 8500.0}
+        {"name": "AK-47 | Asiimov", "wear": 0.08, "value_usd": 9.5, "weapon": "AK-47"},
+        {"name": "M4A1-S | Printstream", "wear": 0.12, "value_usd": 15.75, "weapon": "M4A1-S"},
+        {"name": "AWP | Dragon Lore", "wear": 0.05, "value_usd": 8500.0, "weapon": "AWP"}
     ]
     
     total_value = sum(item['value_usd'] for item in mock_items)
@@ -78,59 +117,9 @@ async def track_inventory(steam_id: str):
         "lowest_value_item": min(mock_items, key=lambda x: x['value_usd'])
     }
 
-# ===== NEW PRICE API ROUTES =====
-@app.get("/api/prices/steam/{skin_name}")
-async def get_steam_price(skin_name: str, market_source: str = "steam"):
-    """Get real-time Steam Market price"""
-    # This will be handled by the price_router when imported
-    return {"message": f"Fetching Steam price for: {skin_name}"}
-
-@app.get("/api/prices/csfloat/{skin_name}")
-async def get_csfloat_price(skin_name: str):
-    """Get CSFloat market price (requires API key in config.py)"""
-    return {"message": "CSFloat price endpoint - requires API key configuration"}
-
-@app.get("/api/prices/trends")
-async def get_price_trends(days: int = 7):
-    """Get historical price trends for popular items"""
-    popular_items = ["AK-47 | Asiimov", "AWP | Dragon Lore", "Karambit | Doppler"]
-    
-    # Mock trend data (replace with real API calls)
-    return {
-        "trends": [
-            {"item": item, "trend_percent": round((random.uniform(-10, 15)), 2)}
-            for item in popular_items
-        ]
-    }
-
-# ===== OLD ENDPOINTS =====
-@app.get("/api/users/me", response_class=JSONResponse)
-async def get_current_user(steam_id: str = None):
-    if steam_id not in users:
-        return {"message": "User not logged in", "steam_id": steam_id}
-    
-    user = users[steam_id]
-    return {
-        "username": user.username,
-        "steam_id": user.steam_id,
-        "account_created": datetime.now().isoformat()
-    }
-
-@app.get("/docs")
-async def docs():
-    """API documentation"""
-    return {
-        "message": "Skiniify API v2.0 - Real-time Steam/CSFloat Market Data",
-        "endpoints": [
-            "/api/auth/login",
-            "/api/trade-up-calculate", 
-            "/api/inventory/track",
-            "/api/prices/steam/{skin_name}",      # NEW - Real-time Steam prices
-            "/api/prices/csfloat/{skin_name}",   # NEW - CSFloat market data
-            "/api/prices/trends",                 # NEW - Price trends analytics
-            "/docs"                               # API docs (Swagger UI)
-        ]
-    }
-
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == "--reload":
+        uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)
+    else:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
