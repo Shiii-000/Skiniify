@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade-Up Calculator - Skiniify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 font-sans text-white">
+    
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+        <nav class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-white hover:text-orange-500 transition">Skiniify 🔪</a>
+            <div class="flex gap-4">
+                <a href="/calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition">Calculator</a>
+                <a href="/inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition">Inventory</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-6 py-8">
+        
+        <h2 class="text-2xl text-white font-bold mb-4 flex items-center gap-2">🔪 Trade-Up Calculator</h2>
+        
+        <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+            <h3 class="text-lg text-white font-semibold mb-4">Enter Your Items</h3>
+            
+            <div class="space-y-6">
+                <!-- Item 1 -->
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <label class="block text-sm text-gray-400 mb-2">Item 1 (x3 items)</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="item1_weapon" placeholder="Weapon (e.g., AK-47)" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="text" id="item1_skin" placeholder="Skin (e.g., Redline)" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="number" id="item1_wear" placeholder="Wear (0.0-1.0)" 
+                               step="0.01" value="0.15"
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <label class="block text-sm text-gray-400 mb-2">Item 2</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="item2_weapon" placeholder="Weapon" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="text" id="item2_skin" placeholder="Skin" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="number" id="item2_wear" placeholder="Wear" 
+                               step="0.01" value="0.16"
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <label class="block text-sm text-gray-400 mb-2">Item 3</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="item3_weapon" placeholder="Weapon" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="text" id="item3_skin" placeholder="Skin" 
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        <input type="number" id="item3_wear" placeholder="Wear" 
+                               step="0.01" value="0.14"
+                               class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                    </div>
+                </div>
+
+                <!-- Calculate Button -->
+                <button onclick="calculateTradeUp()" 
+                        class="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg transition"
+                        id="calculateBtn">
+                    Calculate Trade-Up Result
+                </button>
+            </div>
+
+            <!-- Results -->
+            <div id="results" class="hidden mt-8 space-y-4">
+                <div class="p-4 bg-green-900/30 rounded-lg border border-green-800">
+                    <p class="text-green-400 text-sm font-medium">✓ Expected Item</p>
+                    <p class="text-white text-lg" id="result_item"></p>
+                </div>
+                
+                <div class="p-4 bg-blue-900/30 rounded-lg border border-blue-800">
+                    <p class="text-blue-400 text-sm font-medium">✓ Expected Wear Range</p>
+                    <p class="text-white text-lg" id="result_wear"></p>
+                </div>
+
+                <div class="p-4 bg-purple-900/30 rounded-lg border border-purple-800">
+                    <p class="text-purple-400 text-sm font-medium">✓ Estimated Value</p>
+                    <p class="text-white text-lg" id="result_value"></p>
+                </div>
+
+                <div class="p-4 bg-orange-900/30 rounded-lg border border-orange-800">
+                    <p class="text-orange-400 text-sm font-medium">✓ Steam Trade Fee (8%)</p>
+                    <p class="text-white text-lg" id="result_fee"></p>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="mt-6 p-4 bg-gray-700 rounded-xl">
+                <h3 class="text-white font-semibold mb-2">💡 Tips:</h3>
+                <ul class="text-sm text-gray-400 space-y-1">
+                    <li>• Always use the same weapon type for trade-ups</li>
+                    <li>• Wear levels are additive in trade-up calculations</li>
+                    <li>• Steam takes 8% trading fee on market transactions</li>
+                </ul>
+            </div>
+
+            <!-- API Integration Test -->
+            <div class="mt-8 p-4 bg-blue-900/20 rounded-xl border border-blue-700">
+                <h3 class="text-white font-semibold mb-2">🔗 Backend API Test</h3>
+                <p class="text-gray-400 text-sm mb-3">Test the trade-up calculator API:</p>
+                <div id="api_result" class="hidden p-3 bg-gray-800 rounded"></div>
+                <button onclick="testTradeUpAPI()" class="mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded transition">Test API Call</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-8 mt-12 border-t border-gray-700">
+        <div class="max-w-4xl mx-auto px-6 text-center text-gray-400">
+            <p>© 2024 Skiniify — Built by Shii-000</p>
+            <p class="mt-2 text-sm">Discord Community Coming Soon!</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        function calculateTradeUp() {
+            const item1 = { 
+                weapon: document.getElementById('item1_weapon').value, 
+                skin: document.getElementById('item1_skin').value, 
+                wear: parseFloat(document.getElementById('item1_wear').value) || 0.15, 
+                count: 3 
+            };
+
+            const item2 = { 
+                weapon: document.getElementById('item2_weapon').value, 
+                skin: document.getElementById('item2_skin').value, 
+                wear: parseFloat(document.getElementById('item2_wear').value) || 0.16, 
+                count: 1 
+            };
+
+            const item3 = { 
+                weapon: document.getElementById('item3_weapon').value, 
+                skin: document.getElementById('item3_skin').value, 
+                wear: parseFloat(document.getElementById('item3_wear').value) || 0.14, 
+                count: 1 
+            };
+
+            if (!item1.weapon || !item2.weapon || !item3.weapon) {
+                alert('Please fill in weapon names for all items!');
+                return;
+            }
+
+            const totalWear = item1.wear * item1.count + item2.wear * item2.count + item3.wear * item3.count;
+            const avgWear = totalWear / (item1.count + item2.count + item3.count);
+            const expectedWear = avgWear + 0.015;
+            const wearRangeMin = Math.max(0, expectedWear - 0.02).toFixed(3);
+            const wearRangeMax = (expectedWear + 0.02).toFixed(3);
+            const primaryWeapon = item1.weapon;
+            const basePrice = avgWear * 1000 + 50;
+            const tradeFee = basePrice * 0.08;
+
+            document.getElementById('result_item').textContent = `${primaryWeapon} | Classified Item`;
+            document.getElementById('result_wear').textContent = `[${wearRangeMin}, ${wearRangeMax}]`;
+            document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)} USD`;
+            document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} USD`;
+            document.getElementById('results').classList.remove('hidden');
+        }
+
+        async function testTradeUpAPI() {
+            const item1 = { weapon: document.getElementById('item1_weapon').value, skin: document.getElementById('item1_skin').value, wear: parseFloat(document.getElementById('item1_wear').value) || 0.15 };
+            const item2 = { weapon: document.getElementById('item2_weapon').value, skin: document.getElementById('item2_skin').value, wear: parseFloat(document.getElementById('item2_wear').value) || 0.16 };
+            const item3 = { weapon: document.getElementById('item3_weapon').value, skin: document.getElementById('item3_skin').value, wear: parseFloat(document.getElementById('item3_wear').value) || 0.14 };
+
+            try {
+                const response = await fetch('/api/trade-up-calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: [item1, item2, item3], target_rarity: "Covert" })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('api_result').classList.remove('hidden');
+                    document.getElementById('api_result').innerHTML = `
+                        <p class="text-green-400 text-sm font-medium">✓ API Response</p>
+                        <p class="text-white text-lg"><strong>${data.expected_item}</strong></p>
+                        <p class="text-gray-400">Wear: ${data.expected_wear_range.join(', ')}</p>
+                        <p class="text-green-400">Value: $${data.estimated_value_usd} USD</p>
+                    `;
+                } else {
+                    alert('API returned error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error calling API. Make sure backend is running!');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+# Python dependencies
+venv/
+env/
+.env
+
+# Node.js dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
