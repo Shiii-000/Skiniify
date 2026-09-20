@@ -1,4 +1,107 @@
-            return HTMLResponse(content="<h1 class='text-center text-2xl font-bold mt-8 p-8'>⚠️ Build frontend with 'npm run build' first, or visit http://localhost:3000</h1>")
+from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.responses import HTMLResponse, JSONResponse
+import uvicorn
+from datetime import datetime
+from models.user import UserSchema, LoginRequest
+from models.inventory import InventoryResponse, InventoryItemSchema
+
+# Import price routes
+try:
+    from api.routes.price import router as price_router
+except Exception as e:
+    print(f"Price routes import warning: {e}")
+
+app = FastAPI(
+    title="Skiniify API",
+    description="CS:GO/CS2 Item Tracker & Trade-Up Calculator with Real-Time Prices from CSFloat & Steam",
+    version="3.0.0"
+)
+
+# In-memory user storage
+users = {}
+
+@app.get("/")
+async def serve_home():
+    # Serve Next.js frontend build if exists, otherwise show simple welcome
+    try:
+        content = open("frontend/.next/static/chunks/pages/_index.js", "r", encoding="utf-8").read()
+        return HTMLResponse(content=content)
+    except FileNotFoundError:
+        return HTMLResponse(content="""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Skiniify - CS:GO/CS2 Inventory Tracker</title>
+            <script src="https://cdn.tailwindcss.com"></script>
+        </head>
+        <body class="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Header -->
+                <header class="text-center mb-12">
+                    <h1 class="text-6xl font-bold mb-4">🔪 Skiniify</h1>
+                    <p class="text-xl text-gray-300">CS:GO/CS2 Inventory Tracker & Trade-Up Calculator</p>
+                </header>
+
+                <!-- Features Grid -->
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-orange-500 transition">
+                        <h3 class="text-2xl font-bold mb-3">🔪 Trade-Up Calculator</h3>
+                        <p class="text-gray-300 text-sm">Calculate expected wear and profit when trading up 10 items with Steam's official formula</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-blue-500 transition">
+                        <h3 class="text-2xl font-bold mb-3">📊 Market Tracker</h3>
+                        <p class="text-gray-300 text-sm">Real-time CSFloat & Steam market prices with dual-source comparison</p>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-green-500 transition">
+                        <h3 class="text-2xl font-bold mb-3">🎒 Inventory Manager</h3>
+                        <p class="text-gray-300 text-sm">Track your skin collection with live portfolio valuation</p>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid md:grid-cols-2 gap-6 mb-12">
+                    <a href="/calculator" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-6 px-8 rounded-xl text-center transition shadow-lg">
+                        🎯 Trade-Up Calculator
+                    </a>
+                    <a href="http://localhost:3000" class="bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white font-bold py-6 px-8 rounded-xl text-center transition shadow-lg">
+                        📊 Main Dashboard (Next.js)
+                    </a>
+                </div>
+
+                <!-- Discord Banner -->
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <h3 class="text-xl font-bold mb-2">🎮 Join Our Discord Community</h3>
+                    <p class="text-gray-300 mb-4">Get support, report bugs, and share features with other CS:GO players!</p>
+                    <a href="https://discord.gg/anKZZ7FpwH" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition">
+                        Join Discord →
+                    </a>
+                </div>
+
+                <!-- Footer -->
+                <footer class="mt-12 text-center text-gray-500 text-sm">
+                    <p>🔪 Skiniify - Built by Shii-000 for the CS:GO/CS2 community</p>
+                    <p class="mt-2">Powered by CSFloat API & Steam Market | v3.0.0</p>
+                </footer>
+            </div>
+        </body>
+        </html>
+        """)
+
+@app.get("/calculator")
+async def serve_calculator():
+    """Serve the calculator page"""
+    try:
+        content = open("frontend/.next/static/chunks/pages/calculator/page.js", "r", encoding="utf-8").read()
+        return HTMLResponse(content=content)
+    except FileNotFoundError:
+        # Fall back to static calculator page
+        try:
+            content = open("backend/templates/calculator.html", "r", encoding="utf-8").read()
+            return HTMLResponse(content=content)
+        except FileNotFoundError:
+            return HTMLResponse(content='<h1 class="text-center text-2xl font-bold mt-8 p-8">⚠️ Build frontend with "npm run build" first, or visit http://localhost:3000</h1>')
 
 @app.post("/api/auth/login", response_class=JSONResponse)
 async def login(data: LoginRequest):
