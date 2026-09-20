@@ -3,27 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skiniify - CS:GO/CS2 Item Tracker</title>
+    <title>Skiniify - CS:GO/CS2 Trade-Up Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load weapon images from Steam CDN -->
     <link rel="stylesheet" href="styles.css">
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: #fff; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Wear badges */
         .wear-badge-factory-new { background: #22c55e; }
         .wear-badge-minimal-wear { background: #3b82f6; }
         .wear-badge-field-tested { background: #f97316; }
-        
-        /* Price indicators */
-        .price-up { color: #22c55e; }
-        .price-down { color: #ef4444; }
-        
-        /* Glowing effects for buttons */
-        .glow-orange { box-shadow: 0 0 10px rgba(249, 115, 22, 0.3); }
-        .glow-blue { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body class="min-h-screen">
@@ -45,38 +34,16 @@
     <!-- Main Content -->
     <main class="max-w-xl mx-auto px-4 py-8">
         
-        <!-- Hero Section with gradient background -->
+        <!-- Hero Section -->
         <section class="text-center mb-10 relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-transparent"></div>
             <h1 class="text-4xl md:text-5xl font-bold mb-3 relative z-10">Welcome to <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-blue-500 animate-pulse">Skiniify</span></h1>
-            <p class="text-gray-300 text-sm md:text-base max-w-md mx-auto mb-8 relative z-10">Your CS:GO/CS2 item tracker for trade-ups, inventory management, and market insights.</p>
+            <p class="text-gray-300 text-sm md:text-base max-w-md mx-auto mb-8 relative z-10">Your CS:GO/CS2 trade-up calculator with EXACT 10-item support</p>
             
             <div class="flex gap-3 justify-center flex-wrap relative z-10">
-                <a href="#calculator" class="px-6 py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg glow-orange">🔪 Trade-Up Calculator</a>
-                <a href="#inventory" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg glow-blue">🎒 Inventory Manager</a>
+                <a href="#calculator" class="px-6 py-2.5 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg">🔪 Trade-Up Calculator (10 Items)</a>
             </div>
         </section>
-
-        <!-- Features Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700 hover:border-orange-600 transition transform hover:-translate-y-1 shadow-lg group">
-                <div class="text-orange-500 text-2xl mb-2 group-hover:scale-110 transition-transform">🔪</div>
-                <h3 class="text-lg font-semibold mb-1 text-white">Trade-Up Calculator</h3>
-                <p class="text-gray-400 text-xs">Calculate expected wear and value for 3 items instantly.</p>
-            </div>
-            
-            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700 hover:border-blue-600 transition transform hover:-translate-y-1 shadow-lg group">
-                <div class="text-blue-500 text-2xl mb-2 group-hover:scale-110 transition-transform">📊</div>
-                <h3 class="text-lg font-semibold mb-1 text-white">Market Tracker</h3>
-                <p class="text-gray-400 text-xs">Real-time price tracking with trend indicators.</p>
-            </div>
-            
-            <div class="bg-gray-800/50 p-5 rounded-xl border border-gray-700 hover:border-purple-600 transition transform hover:-translate-y-1 shadow-lg group">
-                <div class="text-purple-500 text-2xl mb-2 group-hover:scale-110 transition-transform">🎒</div>
-                <h3 class="text-lg font-semibold mb-1 text-white">Inventory Manager</h3>
-                <p class="text-gray-400 text-xs">Track owned skins, portfolio value, and low-value items.</p>
-            </div>
-        </div>
 
     </main>
 
@@ -88,63 +55,38 @@
         </div>
     </footer>
 
-    <!-- Calculator Section - Embedded at bottom for single-page feel -->
-    <section id="calculator" class="bg-gray-800/30 rounded-xl p-6 border border-gray-700 shadow-2xl mt-8 scroll-mt-20">
-        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">🔪 Trade-Up Calculator</h2>
-        
-        <div class="space-y-6">
-            <!-- Item 1 -->
-            <div class="p-4 bg-gradient-to-r from-gray-800 to-gray-750 rounded-lg border-l-4 border-orange-500 shadow-md relative overflow-hidden hover:border-orange-600 transition">
-                <label class="block text-sm text-gray-300 mb-2">Item 1 (x3 items)</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="item1_weapon" placeholder="Weapon (e.g., AK-47)" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full font-semibold transition-all"
-                           value="AK-47">
-                    <input type="text" id="item1_skin" placeholder="Skin (e.g., Redline)" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full transition-all"
-                           value="Redline">
-                    <input type="number" id="item1_wear" placeholder="Wear (0.0-1.0)" 
-                           step="0.01" min="0" max="1" value="0.15"
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full font-mono transition-all">
-                </div>
+    <!-- Calculator Section -->
+    <section id="calculator" class="bg-gray-800/30 rounded-xl p-6 border-2 border-orange-600/30 shadow-2xl mt-8 scroll-mt-20">
+        <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">
+            🔪 Trade-Up Calculator (CS:GO Rules)
+            <span class="text-xs bg-orange-900/50 px-3 py-1 rounded-full text-orange-300 border border-orange-600/30 ml-auto">
+                EXACTLY 10 ITEMS OF SAME WEAPON
+            </span>
+        </h2>
+
+        <div class="space-y-4">
+            <!-- Instructions -->
+            <div class="p-4 bg-blue-900/20 rounded-lg border-l-4 border-blue-500 mb-6">
+                <h3 class="text-white font-semibold mb-2 flex items-center gap-2">
+                    ⚠️ IMPORTANT: CS:GO Trade-Up Rules
+                </h3>
+                <ul class="text-sm text-gray-300 space-y-1 ml-6">
+                    <li>✓ Must enter EXACTLY 10 skins</li>
+                    <li>✓ All must be from the SAME WEAPON (e.g., 10x AK-47)</li>
+                    <li>✓ All must be from the same rarity (Mil-Spec / Restricted / Classified)</li>
+                    <li>✓ Calculate average wear across all 10 items</li>
+                </ul>
             </div>
 
-            <!-- Item 2 -->
-            <div class="p-4 bg-gradient-to-r from-gray-800 to-gray-750 rounded-lg border-l-4 border-blue-500 shadow-md relative overflow-hidden hover:border-blue-600 transition">
-                <label class="block text-sm text-gray-300 mb-2">Item 2</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="item2_weapon" placeholder="Weapon (same as Item 1)" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full font-semibold transition-all"
-                           value="AK-47">
-                    <input type="text" id="item2_skin" placeholder="Skin" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full transition-all"
-                           value="Redline">
-                    <input type="number" id="item2_wear" placeholder="Wear" 
-                           step="0.01" min="0" max="1" value="0.16"
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-full font-mono transition-all">
-                </div>
+            <!-- Input Grid for 10 Items -->
+            <div id="inputs-container" class="space-y-3">
+                <!-- JavaScript will dynamically add 10 input fields here -->
             </div>
 
-            <!-- Item 3 -->
-            <div class="p-4 bg-gradient-to-r from-gray-800 to-gray-750 rounded-lg border-l-4 border-purple-500 shadow-md relative overflow-hidden hover:border-purple-600 transition">
-                <label class="block text-sm text-gray-300 mb-2">Item 3</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <input type="text" id="item3_weapon" placeholder="Weapon (same as Item 1)" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full font-semibold transition-all"
-                           value="AK-47">
-                    <input type="text" id="item3_skin" placeholder="Skin" 
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full transition-all"
-                           value="Redline">
-                    <input type="number" id="item3_wear" placeholder="Wear" 
-                           step="0.01" min="0" max="1" value="0.14"
-                           class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-purple-500 w-full font-mono transition-all">
-                </div>
-            </div>
-
-            <!-- Calculate Button with better styling -->
+            <!-- Calculate Button -->
             <button onclick="calculateTradeUp()" 
-                    class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-xl glow-orange">
-                🔥 Calculate Trade-Up (Any # Same Weapon)
+                    class="w-full py-4 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-xl">
+                🔥 Calculate Trade-Up Result (10 Items)
             </button>
 
             <!-- Results -->
@@ -174,24 +116,39 @@
             <div class="mt-6 p-4 bg-gray-700 rounded-xl border-l-4 border-blue-500">
                 <h3 class="text-white font-semibold mb-2 flex items-center gap-2">💡 Pro Tips:</h3>
                 <ul class="text-sm text-gray-300 space-y-1 ml-6">
-                    <li>✓ Always use the same weapon type for all 3 items</li>
-                    <li>✓ Wear levels are additive in trade-up calculations</li>
-                    <li>✓ Steam takes 8% trading fee on market transactions</li>
-                    <li>✓ Factory New (0.0-0.07) and Minimal Wear (0.07-0.15) are most valuable</li>
+                    <li>✓ Use CSFloat or Steam Market for actual skin names</li>
+                    <li>✓ Keep all 10 items within same rarity (same colored bar)</li>
+                    <li>✓ Wear calculation: average of all 10 items + ~0.015</li>
+                    <li>✓ Factory New requires avg wear < 0.07, Minimal Wear < 0.15</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Scripts - Standalone Mode with Enhanced Features -->
+    <!-- Scripts -->
     <script>
-        // Wear level categories for display
+        // Generate 10 input fields dynamically
+        const inputsContainer = document.getElementById('inputs-container');
+        
+        // Mock price data for MVP
+        const MOCK_PRICES = {
+            'AK-47 | Asiimov': 9.50,
+            'AK-47 | Redline': 0.99,
+            'M4A1-S | Printstream': 15.75,
+            'AWP | Dragon Lore': 8500.00,
+            'Karambit | Doppler': 1200.00,
+            'Glock-18 | Fade': 450.00,
+            'AK-47 | Atheris': 35.00,
+            'M4A4 | Howl': 350.00
+        };
+
+        // Wear level categories
         const WEAR_LEVELS = {
             'Factory New': { min: 0.00, max: 0.07 },
             'Minimal Wear': { min: 0.07, max: 0.15 },
-            'Field-Tested': { min: 0.15, max: 0.21 },
-            'Well-Worn': { min: 0.21, max: 0.36 },
-            'Battle-Scarred': { min: 0.36, max: 1.0 }
+            'Field-Tested': { min: 0.15, max: 0.38 },
+            'Well-Worn': { min: 0.38, max: 0.45 },
+            'Battle-Scarred': { min: 0.45, max: 1.0 }
         };
 
         function getWearCategory(wear) {
@@ -203,170 +160,171 @@
             return 'Unknown';
         }
 
-        // Mock price data - can be extended with real API later
-        const MOCK_PRICES = {
-            'AK-47 | Asiimov': 9.50,
-            'AK-47 | Redline': 0.99,
-            'M4A1-S | Printstream': 15.75,
-            'AWP | Dragon Lore': 8500.00,
-            'Karambit | Doppler': 1200.00,
-            'Glock-18 | Fade': 450.00,
-            'AK-47 | Atheris': 35.00,
-            'AK-47 | Wild Lotus': 42.00,
-            'M4A1-S | Black Lab': 18.50
-        };
+        // Generate 10 input fields
+        function generateInputs() {
+            inputsContainer.innerHTML = '';
+            const defaultValues = [
+                { weapon: 'AK-47', skin: 'Asiimov', wear: 0.12 },
+                { weapon: 'AK-47', skin: 'Redline', wear: 0.13 },
+                { weapon: 'AK-47', skin: 'Wild Lotus', wear: 0.11 },
+                { weapon: 'AK-47', skin: 'Frosty', wear: 0.14 },
+                { weapon: 'AK-47', skin: 'Vulcan', wear: 0.125 },
+                { weapon: 'AK-47', skin: 'Neon Twilight', wear: 0.135 },
+                { weapon: 'AK-47', skin: 'Cyrex', wear: 0.128 },
+                { weapon: 'AK-47', skin: 'Sanctuary', wear: 0.132 },
+                { weapon: 'AK-47', skin: 'Neo-Noir', wear: 0.126 },
+                { weapon: 'AK-47', skin: 'Fire Serpent', wear: 0.138 }
+            ];
 
-        // Get weapon image URL from Steam CDN
-        function getWeaponImageUrl(weaponName) {
-            const weaponIcons = {
-                'AK-47': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f',
-                'M4': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f',
-                'AWP': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f',
-                'Glock': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f',
-                'USP': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f',
-                'Deagle': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/90fx90f'
-            };
-            return weaponIcons[weaponName] || null;
+            defaultValues.forEach((item, index) => {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'p-3 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition';
+                inputGroup.innerHTML = `
+                    <label class="block text-xs text-gray-400 mb-1">Item ${index + 1}</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <input type="text" id="weapon${index + 1}" placeholder="Weapon (e.g., AK-47)" 
+                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full font-semibold"
+                               value="${item.weapon}">
+                        <input type="text" id="skin${index + 1}" placeholder="Skin (e.g., Asiimov)" 
+                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full"
+                               value="${item.skin}">
+                        <input type="number" id="wear${index + 1}" placeholder="Wear" 
+                               step="0.01" min="0" max="1" value="${item.wear}"
+                               class="px-2 py-1 bg-gray-900 text-sm text-white rounded border border-gray-600 focus:border-orange-500 w-full font-mono">
+                    </div>
+                `;
+                inputsContainer.appendChild(inputGroup);
+            });
         }
 
-        // Enhanced trade-up calculation logic with CS:GO proper mechanics
+        // Calculate trade-up with EXACTLY 10 items
         function calculateTradeUp() {
-            // Get all inputs
-            const weapon1 = document.getElementById('item1_weapon').value.trim();
-            const skin1 = document.getElementById('item1_skin').value.trim();
-            const wear1 = parseFloat(document.getElementById('item1_wear').value) || 0.15;
-            
-            const weapon2 = document.getElementById('item2_weapon').value.trim();
-            const skin2 = document.getElementById('item2_skin').value.trim();
-            const wear2 = parseFloat(document.getElementById('item2_wear').value) || 0.16;
-            
-            const weapon3 = document.getElementById('item3_weapon').value.trim();
-            const skin3 = document.getElementById('item3_skin').value.trim();
-            const wear3 = parseFloat(document.getElementById('item3_wear').value) || 0.14;
+            let totalWear = 0;
+            let weaponTypes = new Set();
+            let allValid = true;
 
-            // Validation with better error messages
-            // CS:GO TRADE-UP RULES:
-            // ✓ All items must be from SAME WEAPON (AK-47 + AK-47 + AK-47 ✅)
-            // ✗ Different weapons don't work (AK-47 + M4 + AWP ❌)
-            // ✓ Can use 3-10 items (we show 3 as examples, but you can add more if needed!)
+            for (let i = 1; i <= 10; i++) {
+                const weaponInput = document.getElementById(`weapon${i}`);
+                const skinInput = document.getElementById(`skin${i}`);
+                const wearInput = document.getElementById(`wear${i}`);
+                
+                if (!weaponInput || !weaponInput.value.trim()) {
+                    alert(`⚠️ Item ${i}: Weapon name is required!`);
+                    allValid = false;
+                    continue;
+                }
 
-            if (weapon1 !== weapon2 || weapon1 !== weapon3) {
-                alert('⚠️ ERROR: All items must be from the SAME WEAPON!\n\n✅ CORRECT: AK-47 + AK-47 + AK-47\n❌ WRONG:  AK-47 + M4A4 + AWP');
+                const weapon = weaponInput.value.trim();
+                const skin = skinInput.value.trim();
+                let wear = parseFloat(wearInput.value) || 0.15;
+                
+                // Validate wear range
+                if (wear < 0 || wear > 1) {
+                    alert(`⚠️ Item ${i}: Wear must be between 0.0 and 1.0`);
+                    allValid = false;
+                    continue;
+                }
+
+                // Check same weapon rule
+                weaponTypes.add(weapon);
+                
+                // Get price for display (mock data fallback)
+                const fullItemName = `${weapon} | ${skin}`;
+                let basePrice = 10;
+                if (MOCK_PRICES[fullItemName]) {
+                    basePrice = MOCK_PRICES[fullItemName];
+                } else {
+                    // Estimate based on wear for MVP
+                    basePrice = wear * 800 + 35;
+                }
+
+                totalWear += wear;
+            }
+
+            if (!allValid || weaponTypes.size > 1) {
+                alert('⚠️ ERROR: All items must be from the SAME WEAPON!');
                 return;
             }
 
-            const validWear = [wear1, wear2, wear3].every(w => w >= 0 && w <= 1);
-            if (!validWear) { 
-                alert('⚠️ Wear must be between 0.0 and 1.0'); 
-                return; 
-            }
-
-            // Get weapon info for results
-            const primaryWeapon = weapon1;
-            const primarySkin = skin1;
-
-            // CS:GO Trade-Up Formula:
-            // ✓ Averages ALL items together (not fixed to 3)
-            // ✓ Adds ~0.015 wear (Steam's trade-up formula)
-            const totalWear = wear1 + wear2 + wear3;
-            const avgWear = totalWear / 3;
+            // Calculate average wear
+            const avgWear = totalWear / 10;
             
-            // Trade-up adds ~0.015 to each wear level (Steam's formula)
+            // Steam adds ~0.015 to wear on trade-up
             const expectedWear = avgWear + 0.015;
             
-            // Calculate wear range (+/- 2% tolerance) - realistic for trade-ups
+            // Calculate wear range (±2%)
             const wearRangeMin = Math.max(0, expectedWear - 0.02).toFixed(3);
             const wearRangeMax = (expectedWear + 0.02).toFixed(3);
             
-            // Get first weapon as primary
-            const primaryWeapon = item1_weapon;
-            
-            // Calculate estimated value using mock data or realistic estimate
+            // Get primary weapon and skin from first item
+            const weapon1Input = document.getElementById('weapon1');
+            const skin1Input = document.getElementById('skin1');
+            const primaryWeapon = weapon1Input ? weapon1Input.value.trim() : 'AK-47';
+            const primarySkin = skin1Input ? skin1Input.value.trim() : 'Asiimov';
+
+            // Calculate estimated value
             let basePrice = 50;
             const fullItemName = `${primaryWeapon} | ${primarySkin}`;
             if (MOCK_PRICES[fullItemName]) {
                 basePrice = MOCK_PRICES[fullItemName];
             } else {
-                // Calculate based on wear - realistic estimate for trade-up items
-                // Trade-ups typically cost 2-3x the value of individual items
-                basePrice = (wear1 + wear2 + wear3) / 3 * 900 + 40;
+                basePrice = avgWear * 800 + 40;
             }
-            
+
             const tradeFee = basePrice * 0.08;
+            const profitMargin = (basePrice - tradeFee) * 0.95;
 
-            // Get weapon icon for visual enhancement
-            const weaponImageUrl = getWeaponImageUrl(primaryWeapon);
+            // Display results with enhanced wear category info
+            const wearCategory = getWearCategory(expectedWear);
             
-            // Build result text with CS:GO trade-up format
-            let resultText = `🔥 Result: ${primaryWeapon} | Classified (Expected: ${getWearCategory(expectedWear)})`;
+            let resultText = `🔥 Trade-Up Result: ${primaryWeapon} | Classified (Expected: ${wearCategory})`;
             
-            // Add price indicator if available
             if (basePrice > 5) {
-                const trendIcon = basePrice > MOCK_PRICES[`${primaryWeapon} | ${primarySkin}`] || !MOCK_PRICES[`${primaryWeapon} | ${primarySkin}`] ? '▲' : '▼';
-                const priceColor = basePrice > (MOCK_PRICES[`${primaryWeapon} | ${primarySkin}`] || 0) ? '#22c55e' : '#ef4444';
-                resultText += `\n<div class="steam-price" style="color: ${priceColor}; margin-top: 8px; font-size: 0.875rem; font-weight: 600;">💰 Estimated Value: $${basePrice.toFixed(2)} USD ${trendIcon}</div>`;
+                resultText += `\n<div class="steam-price" style="color: #22c55e; margin-top: 8px; font-size: 0.875rem; font-weight: 600;">💰 Estimated Value: $${basePrice.toFixed(2)} USD</div>`;
             }
 
-            // Add wear range with realistic tolerance
             resultText += `\n<div style="color: #3b82f6; margin-top: 6px; font-size: 0.9rem;">📊 Wear Range: [${wearRangeMin}, ${wearRangeMax}]</div>`;
 
-            // Add weapon icon if available
-            if (weaponImageUrl) {
-                resultText = `🖼️ <img src="${weaponImageUrl}" class="inline-weapon-icon" width="48" height="48" style="border-radius: 50%; border: 2px solid #4b5563; transition: all 0.3s ease; margin-right: 8px;"> ${resultText}`;
-            }
-
-            // Display results with smooth animations
+            // Display results
             const results = document.getElementById('results');
             results.classList.add('hidden');
             
             setTimeout(() => {
                 document.getElementById('result_item').innerHTML = resultText;
-                document.getElementById('result_wear').textContent = `[${wearRangeMin}, ${wearRangeMax}]`;
+                document.getElementById('result_wear').textContent = `Avg Wear: ${avgWear.toFixed(3)} | Expected: ${expectedWear.toFixed(3)}`;
                 document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)} USD`;
                 document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} (8% Steam fee)`;
                 
-                // Reset animation
-                results.classList.remove('fade-in');
-                void results.offsetWidth; // Trigger reflow
+                void results.offsetWidth; // Trigger reflow for animation reset
                 results.classList.add('fade-in');
             }, 300);
         }
 
-        // Initialize console message when page loads
+        // Initialize inputs on page load
         window.addEventListener('load', function() {
-            console.log('🔪 Skiniify Calculator Ready!');
-            console.log('💡 Tip: Always use the same weapon type for all 3 items.');
-            console.log('💎 Pro tip: Trade up items with similar wear for better results!');
-            
-            // Pre-load common weapon icons for faster display
-            const weapons = ['AK-47', 'M4', 'AWP'];
-            weapons.forEach(weapon => {
-                const imageUrl = getWeaponImageUrl(weapon);
-                if (imageUrl) {
-                    const img = new Image();
-                    img.src = imageUrl;
-                    img.className = 'preloaded-weapon-icon';
-                    document.body.appendChild(img);
-                }
-            });
+            generateInputs();
+            console.log('🔪 Skiniify Trade-Up Calculator Ready! (10 Items)');
+            console.log('💡 Remember: CS:GO trade-ups require EXACTLY 10 items of the same weapon and rarity!');
         });
 
-        // Export function for inventory management (can be enhanced later)
+        // Export function
         window.exportToCSV = function(items) {
-            const headers = ["Item Name", "Wear", "Value USD"];
+            const headers = ["Item", "Weapon", "Skin", "Wear"];
             const rows = [headers.join(",")];
             
-            items.forEach(item => {
-                const safeName = `"${item.name.replace(/"/g, '""')}"`;
-                rows.push(`${safeName},${item.wear.toFixed(2)},${item.value_usd.toFixed(2)}`);
-            });
+            for (let i = 1; i <= 10; i++) {
+                const weapon = document.getElementById(`weapon${i}`).value || '';
+                const skin = document.getElementById(`skin${i}`).value || '';
+                const wear = document.getElementById(`wear${i}`).value || '0.15';
+                rows.push(`${i}, "${weapon}", "${skin}", ${wear}`);
+            }
 
             const csvContent = rows.join('\n');
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'skini_inventory_export.csv';
+            a.download = 'trade_up_inputs.csv';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -375,7 +333,7 @@
 </body>
 </html>
 
-<!-- Inventory Data - Mock portfolio with real-ish values -->
+<!-- Inventory Data -->
 <script id="inventory-data" type="application/json">
 [
     {"name": "AK-47 | Asiimov", "wear": 0.08, "value_usd": 9.50, "category": "Minimal Wear"},
