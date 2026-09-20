@@ -5,29 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skiniify - CS:GO/CS2 Item Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css">
-    <script src="skin-images.js"></script>
     <style>
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a1a; color: #fff; }
         .fade-in { animation: fadeIn 0.3s ease-out; }
-        .inline-weapon-icon { border-radius: 50%; border: 2px solid #4b5563; transition: all 0.3s ease; }
-        .inline-weapon-icon:hover { transform: scale(1.2); box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4); }
-        .preloaded-weapon-icon { position: fixed; top: 0; left: -9999px; }
-        .steam-price { color: #22c55e; font-size: 0.875rem; margin-top: 0.5rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-[#121212] text-white font-sans min-h-screen">
+<body class="min-h-screen">
 
     <!-- Header -->
-    <header class="sticky top-0 z-50 bg-[#1e1e1e]/95 backdrop-blur border-b border-[#333]">
+    <header class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur border-b border-gray-700">
         <nav class="max-w-xl mx-auto px-4 py-4 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2 text-xl font-bold hover:text-orange-500 transition group">
-                <span class="text-2xl group-hover:scale-110 transition-transform">🔪</span>
-                Skiniify
-            </a>
+            <a href="/" class="text-2xl font-bold hover:text-orange-500 transition group">🔪 Skiniify</a>
             <div class="flex gap-4">
-                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition hover:bg-[#2d2d2d]">Calculator</a>
-                <a href="#inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg transition hover:bg-[#2d2d2d]">Inventory</a>
+                <a href="#calculator" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">Calculator</a>
+                <a href="#inventory" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">Inventory</a>
             </div>
         </nav>
     </header>
@@ -42,100 +34,185 @@
             
             <div class="flex gap-3 justify-center flex-wrap">
                 <a href="#calculator" class="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-sm font-semibold rounded-lg transition transform hover:-translate-y-0.5 shadow-lg shadow-orange-900/20">Trade-Up Calculator</a>
-                <a href="#inventory" class="px-5 py-2.5 bg-[#2d2d2d] border border-[#3a3a3a] hover:border-[#4a4a4a] text-sm font-medium text-gray-300 hover:text-white rounded-lg transition transform hover:-translate-y-0.5">Inventory Manager</a>
+                <a href="#inventory" class="px-5 py-2.5 bg-gray-700 border border-gray-600 hover:border-gray-500 text-sm font-medium text-gray-300 rounded-lg transition transform hover:-translate-y-0.5">Inventory Manager</a>
             </div>
         </section>
 
         <!-- Features Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-orange-600/50 transition transform hover:-translate-y-1 shadow-lg">
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 hover:border-orange-600 transition transform hover:-translate-y-1 shadow-lg">
                 <div class="text-orange-500 text-2xl mb-2">🔪</div>
                 <h3 class="text-lg font-semibold mb-1">Trade-Up Calculator</h3>
-                <p class="text-gray-500 text-xs">Calculate expected wear and value for 3 items.</p>
+                <p class="text-gray-400 text-xs">Calculate expected wear and value for 3 items.</p>
             </div>
             
-            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-blue-600/50 transition transform hover:-translate-y-1 shadow-lg">
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 hover:border-blue-600 transition transform hover:-translate-y-1 shadow-lg">
                 <div class="text-blue-500 text-2xl mb-2">📊</div>
                 <h3 class="text-lg font-semibold mb-1">Market Tracker</h3>
-                <p class="text-gray-500 text-xs">Real-time price tracking with history charts.</p>
+                <p class="text-gray-400 text-xs">Real-time price tracking with history charts.</p>
             </div>
             
-            <div class="bg-[#1e1e1e] p-5 rounded-xl border border-[#333] hover:border-purple-600/50 transition transform hover:-translate-y-1 shadow-lg">
+            <div class="bg-gray-800 p-5 rounded-xl border border-gray-700 hover:border-purple-600 transition transform hover:-translate-y-1 shadow-lg">
                 <div class="text-purple-500 text-2xl mb-2">🎒</div>
                 <h3 class="text-lg font-semibold mb-1">Inventory Manager</h3>
-                <p class="text-gray-500 text-xs">Track owned skins, portfolio value, and low-value items.</p>
+                <p class="text-gray-400 text-xs">Track owned skins, portfolio value, and low-value items.</p>
             </div>
         </div>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="mb-8 scroll-mt-20">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 pb-2 border-b border-gray-700">🔪 Trade-Up Calculator</h2>
+            
+            <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 shadow-lg">
+                <h3 class="text-lg text-white font-semibold mb-4">Enter Your Items</h3>
+                
+                <div class="space-y-6">
+                    <!-- Item 1 -->
+                    <div class="p-4 bg-gray-700 rounded-lg">
+                        <label class="block text-sm text-gray-400 mb-2">Item 1 (x3 items)</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="text" id="item1_weapon" placeholder="Weapon (e.g., AK-47)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="AK-47">
+                            <input type="text" id="item1_skin" placeholder="Skin (e.g., Redline)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="Redline">
+                            <input type="number" id="item1_wear" placeholder="Wear (0.0-1.0)" 
+                                   step="0.01" min="0" max="1" value="0.15"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="p-4 bg-gray-700 rounded-lg">
+                        <label class="block text-sm text-gray-400 mb-2">Item 2</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="text" id="item2_weapon" placeholder="Weapon (same as Item 1)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="AK-47">
+                            <input type="text" id="item2_skin" placeholder="Skin" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="Redline">
+                            <input type="number" id="item2_wear" placeholder="Wear" 
+                                   step="0.01" min="0" max="1" value="0.16"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="p-4 bg-gray-700 rounded-lg">
+                        <label class="block text-sm text-gray-400 mb-2">Item 3</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <input type="text" id="item3_weapon" placeholder="Weapon (same as Item 1)" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="AK-47">
+                            <input type="text" id="item3_skin" placeholder="Skin" 
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full"
+                                   value="Redline">
+                            <input type="number" id="item3_wear" placeholder="Wear" 
+                                   step="0.01" min="0" max="1" value="0.14"
+                                   class="px-3 py-2 bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-orange-500 w-full">
+                        </div>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button onclick="calculateTradeUp()" 
+                            class="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-lg"
+                            id="calculateBtn">
+                        🔥 Calculate Trade-Up Result
+                    </button>
+                </div>
+
+                <!-- Results -->
+                <div id="results" class="hidden mt-8 space-y-4">
+                    <div class="p-4 bg-green-900/30 rounded-lg border border-green-800 shadow-lg transform animate-pulse-custom">
+                        <p class="text-green-400 text-sm font-medium">✓ Expected Item</p>
+                        <p class="text-white text-xl font-bold" id="result_item"></p>
+                    </div>
+                    
+                    <div class="p-4 bg-blue-900/30 rounded-lg border border-blue-800 shadow-lg transform animate-pulse-custom">
+                        <p class="text-blue-400 text-sm font-medium">✓ Expected Wear Range (±2%)</p>
+                        <p class="text-white text-xl font-bold" id="result_wear"></p>
+                    </div>
+
+                    <div class="p-4 bg-purple-900/30 rounded-lg border border-purple-800 shadow-lg transform animate-pulse-custom">
+                        <p class="text-purple-400 text-sm font-medium">✓ Estimated Value</p>
+                        <p class="text-white text-xl font-bold" id="result_value"></p>
+                    </div>
+
+                    <div class="p-4 bg-orange-900/30 rounded-lg border border-orange-800 shadow-lg transform animate-pulse-custom">
+                        <p class="text-orange-400 text-sm font-medium">✓ Steam Trade Fee (8%)</p>
+                        <p class="text-white text-xl font-bold" id="result_fee"></p>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div class="mt-6 p-4 bg-gray-700 rounded-xl">
+                    <h3 class="text-white font-semibold mb-2 flex items-center gap-2">💡 Pro Tips:</h3>
+                    <ul class="text-sm text-gray-300 space-y-1 ml-6">
+                        <li>✓ Always use the same weapon type for all 3 items</li>
+                        <li>✓ Wear levels are additive in trade-up calculations</li>
+                        <li>✓ Steam takes 8% trading fee on market transactions</li>
+                        <li>✓ Factory New (0.0-0.07) and Minimal Wear (0.07-0.15) are most valuable</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-[#1e1e1e] py-6 mt-12 border-t border-[#333]">
-        <div class="max-w-xl mx-auto px-4 text-center text-gray-500 text-xs">
+    <footer class="bg-gray-800 py-6 mt-12 border-t border-gray-700">
+        <div class="max-w-xl mx-auto px-4 text-center text-gray-400">
             <p>© 2024 Skiniify — Built by <span class="text-orange-500 font-semibold">Shii-000</span></p>
             <a href="https://discord.gg/anKZZ7FpwH" target="_blank" class="mt-2 inline-block px-6 py-2 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-full text-sm font-semibold transition transform hover:-translate-y-0.5">🎮 Join Discord Community</a>
         </div>
     </footer>
 
-    <!-- Scripts (Stand-alone mode - no backend needed!) -->
-    <script src="calculator.js"></script>
-    <script src="inventory.js"></script>
-    
-    <!-- Standalone Calculator Script (no API calls needed) -->
+    <!-- Scripts - Standalone Mode (no external JS files needed!) -->
     <script>
-        // Mock price data for MVP (works without backend!)
+        // Wear level categories for display
+        const WEAR_LEVELS = {
+            'Factory New': { min: 0.00, max: 0.07 },
+            'Minimal Wear': { min: 0.07, max: 0.15 },
+            'Field-Tested': { min: 0.15, max: 0.21 },
+            'Well-Worn': { min: 0.21, max: 0.36 },
+            'Battle-Scarred': { min: 0.36, max: 1.0 }
+        };
+
+        function getWearCategory(wear) {
+            for (const [category, range] of Object.entries(WEAR_LEVELS)) {
+                if (wear >= range.min && wear <= range.max) {
+                    return category;
+                }
+            }
+            return 'Unknown';
+        }
+
+        // Mock price data for MVP - works without any API!
         const MOCK_PRICES = {
             'AK-47 | Asiimov': 9.50,
             'AK-47 | Redline': 0.99,
             'M4A1-S | Printstream': 15.75,
             'AWP | Dragon Lore': 8500.00,
             'Karambit | Doppler': 1200.00,
-            'Glock-18 | Fade': 450.00
+            'Glock-18 | Fade': 450.00,
+            'AK-47 | Atheris': 35.00,
+            'AK-47 | Wild Lotus': 42.00,
+            'M4A1-S | Printstream': 15.75
         };
 
-        // Weapon images (fallback URLs)
-        const WEAPON_IMAGES = {
-            'AK-47': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/360fx360f',
-            'M4': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/360fx360f',
-            'AWP': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/360fx360f',
-            'Glock': 'https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlXLwJ2UUGcGlMPGsZfYjQz5fF3d94XpHtN0d6VnD7WuE3SgA3lK2MvPqI_1OxLmRkQZ1rYpRzCqU8e/360fx360f'
-        };
-
-        // Standalone calculator (no backend API needed!)
-        window.SkiniifyPrices = {
-            fetchSteamPrice: async function(weapon, skin) {
-                const fullKey = `${weapon} | ${skin}`.toLowerCase();
-                return MOCK_PRICES[fullKey] || {
-                    success: false,
-                    current_price_usd: 5.99,
-                    lowest_price_usd: 4.99,
-                    price_change_percent: 0
-                };
-            },
-            getWeaponImageUrl: function(weapon) {
-                return WEAPON_IMAGES[weapon] || null;
-            },
-            fetchBulkPrices: async function(items) {
-                const inventory = items.map(item => {
-                    const fullKey = `${item.name}`.toLowerCase();
-                    if (MOCK_PRICES[fullKey]) {
-                        return {...item, current_price_usd: MOCK_PRICES[fullKey], category: 'Field-Tested'};
-                    }
-                    return item;
-                });
-                return inventory;
-            }
-        };
-
-        // Standalone calculator logic
-        window.calculateTradeUp = function() {
-            const item1Weapon = document.getElementById('item1_weapon').value.trim();
-            const skin = document.getElementById('item1_skin').value.trim();
+        // Trade-up calculation logic
+        function calculateTradeUp() {
+            const item1_weapon = document.getElementById('item1_weapon').value.trim();
+            const item1_skin = document.getElementById('item1_skin').value.trim();
             const wear1 = parseFloat(document.getElementById('item1_wear').value) || 0.15;
+            
             const wear2 = parseFloat(document.getElementById('item2_wear').value) || 0.16;
             const wear3 = parseFloat(document.getElementById('item3_wear').value) || 0.14;
 
-            if (!item1Weapon || !document.getElementById('item2_weapon').value.trim()) {
+            // Validation
+            if (!item1_weapon || !document.getElementById('item2_weapon').value.trim()) {
                 alert('Please fill in weapon names for all items!');
                 return;
             }
@@ -143,183 +220,156 @@
             const validWear = [wear1, wear2, wear3].every(w => w >= 0 && w <= 1);
             if (!validWear) { alert('Wear must be between 0.0 and 1.0'); return; }
 
-            const avgWear = (wear1 + wear2 + wear3) / 3 + 0.015;
-            const wearRangeMin = Math.max(0.01, avgWear - 0.02).toFixed(3);
-            const wearRangeMax = (avgWear + 0.02).toFixed(3);
-            const basePrice = (avgWear * 1000 + 50) * 0.95;
+            // Calculate average wear
+            const totalWear = wear1 + wear2 + wear3;
+            const avgWear = totalWear / 3;
+            
+            // Trade-up adds ~0.015 to each wear level (Steam's formula)
+            const expectedWear = avgWear + 0.015;
+            
+            // Calculate wear range (+/- 2% tolerance)
+            const wearRangeMin = Math.max(0, expectedWear - 0.02).toFixed(3);
+            const wearRangeMax = (expectedWear + 0.02).toFixed(3);
+            
+            // Get first weapon as primary
+            const primaryWeapon = item1_weapon;
+            
+            // Calculate estimated value using mock data or default
+            let basePrice = 50;
+            const fullItemName = `${primaryWeapon} | ${item1_skin}`;
+            if (MOCK_PRICES[fullItemName]) {
+                basePrice = MOCK_PRICES[fullItemName];
+            } else {
+                // Calculate based on wear - realistic estimate
+                basePrice = avgWear * 500 + 30;
+            }
+            
             const tradeFee = basePrice * 0.08;
+            const profitMargin = (basePrice - tradeFee) * 0.95;
 
-            // Get weapon image
-            window.SkiniifyImages.getWeaponImageUrl(item1Weapon)
-                .then(imageData => {
-                    const imageUrl = imageData?.url || null;
-                    
-                    // Display results with animations
-                    document.getElementById('results').classList.add('hidden');
-                    
-                    setTimeout(() => {
-                        let resultText = `${item1Weapon} | Classified (⚔️ ${getWearCategory(avgWear)})`;
-                        
-                        // Add real Steam price if available
-                        window.SkiniifyPrices.fetchSteamPrice(item1Weapon, skin).then(priceData => {
-                            if (priceData.success && priceData.current_price_usd > 0) {
-                                const steamPrice = `$${priceData.current_price_usd}`;
-                                resultText += `\n<div class="steam-price" style="color: #22c55e; margin-top: 8px; font-size: 0.9rem;">${steamPrice}</div>`;
-                            }
-                        });
-                        
-                        if (imageUrl) {
-                            resultText = `🖼️ <img src="${imageUrl}" class="inline-weapon-icon" width="48" height="48" /> ${resultText}`;
-                        }
-                        
-                        document.getElementById('result_item').innerHTML = resultText;
-                        document.getElementById('result_wear').textContent = `[${wearRangeMin}, ${wearRangeMax}]`;
-                        document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)}`;
-                        document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} (8% Steam fee)`;
-                        
-                        const results = document.getElementById('results');
-                        results.classList.remove('hidden');
-                        results.classList.add('fade-in');
-                    }, 100);
-                });
-        };
-
-        // Wear category function
-        function getWearCategory(wear) {
-            const WEAR_RANGES = { 'Factory New': 0.07, 'Minimal Wear': 0.15, 'Field-Tested': 0.21, 'Well-Worn': 0.36 };
-            for (const [cat, max] of Object.entries(WEAR_RANGES)) {
-                if (wear <= max) return cat;
-            }
-            return 'Battle-Scarred';
-        }
-
-        // Initialize on page load - pre-load weapon images
-        document.addEventListener('DOMContentLoaded', function() {
-            const weapons = ['AK-47', 'M4', 'AWP', 'Glock'];
-            weapons.forEach(async (weapon) => {
-                try {
-                    const imageUrl = window.SkiniifyImages.getWeaponImageUrl(weapon);
-                    if (imageUrl) {
-                        const img = document.createElement('img');
-                        img.src = imageUrl;
-                        img.style.opacity = '0';
-                        img.className = 'preloaded-weapon-icon';
-                        document.body.appendChild(img);
-                        // Remove after loading
-                        img.onload = () => setTimeout(() => img.remove(), 5000);
-                    }
-                } catch(e) {
-                    console.log('Pre-load failed for:', weapon, e);
+            // Display results with animations
+            document.getElementById('results').classList.add('hidden');
+            
+            setTimeout(() => {
+                const wearCategory = getWearCategory(expectedWear);
+                
+                let resultText = `${primaryWeapon} | Classified (${wearCategory})`;
+                
+                // Add price if we have it
+                if (basePrice > 100) {
+                    resultText += `\n<div class="steam-price" style="color: #22c55e; margin-top: 8px; font-size: 0.9rem;">💰 $${basePrice.toFixed(2)}</div>`;
                 }
-            });
-            console.log('🔪 Skiniify Calculator Ready with Standalone Mode!');
-        });
 
-        // Inventory manager (standalone mode)
-        window.renderInventory = function(items) {
-            const WEAR_COLORS = { 'Factory New': '#22c55e', 'Minimal Wear': '#3b82f6', 'Field-Tested': '#f97316', 'Well-Worn': '#eab308', 'Battle-Scarred': '#ef4444' };
-            
-            const inventoryList = document.getElementById('inventoryList');
-            if (!inventoryList) return;
-            
-            inventory.forEach((item, index) => {
-                const wearCategory = item.category || getWearCategory(item.wear);
-                const wearColor = WEAR_COLORS[wearCategory] || '#9ca3af';
-                const isLowValue = item.value_usd < 5;
+                document.getElementById('result_item').innerHTML = resultText;
+                document.getElementById('result_wear').textContent = `[${wearRangeMin}, ${wearRangeMax}]`;
+                document.getElementById('result_value').textContent = `$${basePrice.toFixed(2)} USD`;
+                document.getElementById('result_fee').textContent = `$${tradeFee.toFixed(2)} (8% Steam fee)`;
                 
-                const row = document.createElement('tr');
-                row.className = 'table-row fade-in border-b border-gray-600 hover:bg-gray-700 transition';
-                
-                row.innerHTML = `
-                    <td class="px-4 py-3">
-                        <div class="flex items-center gap-3 item-cell">
-                            ${isLowValue ? '🔥 ' : ''}
-                            <div>
-                                <div class="font-medium text-white flex items-center gap-2 item-name">
-                                    ${item.name}
-                                </div>
-                                <div class="text-sm text-gray-400">${item.wear.toFixed(2)} wear | ${wearCategory}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="px-4 py-3 text-right item-value font-semibold text-green-400">
-                        $${item.value_usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        ${isLowValue ? '<span class="text-xs text-red-400 ml-1">(LOW VALUE)</span>' : ''}
-                    </td>
-                `;
-                
-                inventoryList.appendChild(row);
-            });
-        };
-
-        // Export to CSV function
-        window.exportToCSV = function(inventory) {
-            const headers = ["Item Name", "Wear", "Value USD", "Category"];
-            const rows = [headers.join(",")];
-            
-            inventory.forEach(item => {
-                const safeName = `"${item.name.replace(/"/g, '""')}"`;
-                rows.push(`${safeName},${item.wear.toFixed(2)},${item.value_usd.toFixed(2)},${item.category}`);
-            });
-
-            const csvContent = rows.join('\n');
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `skiniify_inventory_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            console.log('✅ Inventory exported with real prices!');
-        };
-
-        // Calculate button handler (standalone)
-        document.querySelector('#calculator button')?.addEventListener('click', function() {
-            window.calculateTradeUp();
-        });
-
-        // Add item button handler
-        document.querySelector('.bg-blue-600')?.addEventListener('click', function() {
-            addNewItem();
-        });
-
-        // Export to CSV button handler
-        document.querySelector('button.bg-gray-700')?.addEventListener('click', function() {
-            exportToCSV(document.querySelectorAll('#inventoryList tr')[0]?.dataset.items ? JSON.parse(document.getElementById('inventory-list-data').textContent) : []);
-        });
-
-        // Add new item to inventory
-        function addNewItem() {
-            const newItemName = prompt("Enter item name (e.g., AK-47 | Redline):");
-            if (!newItemName) return;
-            
-            const wear = parseFloat(document.getElementById('item1_wear').value) || 0.15;
-            const mockPrice = MOCK_PRICES[`"${newItemName}"`] || 10.0;
-            
-            const inventory = document.querySelectorAll('#inventoryList tr');
-            if (inventory.length > 0) {
-                const currentItems = JSON.parse(inventory[0].dataset.items);
-                currentItems.unshift({ 
-                    name: newItemName, 
-                    wear: wear, 
-                    value_usd: mockPrice, 
-                    category: 'Field-Tested' 
-                });
-                
-                inventoryList.dataset.items = JSON.stringify(currentItems);
-                renderInventory(currentItems);
-            }
-            
-            alert(`Added ${newItemName} to inventory!`);
+                const results = document.getElementById('results');
+                results.classList.remove('hidden');
+                results.style.animation = 'fadeIn 0.5s ease-out';
+            }, 300);
         }
 
-        // Initialize inventory table data attribute (empty initially)
-        const inventoryList = document.getElementById('inventoryList');
-        if (inventoryList) {
-            inventoryList.dataset.items = '[]';
-            renderInventory([]);
-        }
+        // Initialize console message when page loads
+        window.addEventListener('load', function() {
+            console.log('🔪 Skiniify Calculator Ready!');
+            console.log('💡 Tip: Always use the same weapon type for all 3 items.');
+        });
     </script>
 </body>
 </html>
+
+<!-- Standalone inventory section (can be added later) -->
+<script>
+// Simple inventory data - mock portfolio values
+const INVENTORY_DATA = [
+    { name: "AK-47 | Asiimov", wear: 0.08, value_usd: 9.50, category: 'Minimal Wear' },
+    { name: "M4A1-S | Printstream", wear: 0.12, value_usd: 15.75, category: 'Field-Tested' },
+    { name: "AWP | Dragon Lore", wear: 0.05, value_usd: 8500.00, category: 'Factory New' },
+    { name: "Karambit | Doppler", wear: 0.03, value_usd: 1200.00, category: 'Factory New' },
+    { name: "Glock-18 | Fade", wear: 0.07, value_usd: 450.00, category: 'Minimal Wear' }
+];
+
+// Render inventory table
+function renderInventory() {
+    const totalValue = INVENTORY_DATA.reduce((sum, item) => sum + item.value_usd, 0);
+    const wearColors = { 'Factory New': '#22c55e', 'Minimal Wear': '#3b82f6', 'Field-Tested': '#f97316' };
+    
+    let tableHTML = '<table class="w-full">';
+    tableHTML += '<thead class="bg-gray-700"><tr><th class="px-4 py-3 text-left text-white font-semibold">Item Name</th>';
+    tableHTML += '<th class="px-4 py-3 text-right text-white font-semibold">Value (USD)</th></tr></thead>';
+    tableHTML += '<tbody id="inventoryList" class="divide-y divide-gray-600 bg-gray-800">';
+    
+    INVENTORY_DATA.forEach(item => {
+        const isLowValue = item.value_usd < 5;
+        const wearCategory = item.category || 'Field-Tested';
+        
+        tableHTML += `<tr class="hover:bg-gray-750 transition border-b border-gray-600">
+            <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                    ${isLowValue ? '🔥 ' : ''}
+                    <div>
+                        <div class="font-medium text-white">${item.name}</div>
+                        <div class="text-sm text-gray-400">${item.wear.toFixed(2)} wear | ${wearCategory}</div>
+                    </div>
+                </div>
+            </td>`;
+        tableHTML += `<td class="px-4 py-3 text-right font-semibold text-green-400">
+            $${item.value_usd.toFixed(2)}
+            ${isLowValue ? '<span class="text-xs text-red-400 ml-1">(LOW VALUE)</span>' : ''}
+        </td></tr>`;
+    });
+    
+    tableHTML += '</tbody></table>';
+    
+    // Total value card
+    const totalCard = document.createElement('div');
+    totalCard.className = 'bg-gradient-to-r from-green-900/30 to-green-800/20 rounded-lg p-4 mb-4 border border-green-700 fade-in';
+    totalCard.innerHTML = '<h3 class="text-white text-lg font-semibold mb-2">Total Portfolio Value</h3>' +
+                          '<p class="text-4xl text-green-400 font-bold">$' + totalValue.toFixed(2) + '</p>' +
+                          '<p class="text-gray-400 mt-2 text-sm">' + INVENTORY_DATA.length + ' items tracked</p>';
+    
+    // Insert inventory before calculator section
+    const container = document.querySelector('main');
+    const calcSection = document.querySelector('#calculator').parentElement;
+    if (container && calcSection) {
+        calcSection.parentElement.insertBefore(totalCard, calcSection);
+        
+        // Add buttons
+        const buttons = document.createElement('div');
+        buttons.className = 'mt-4 flex gap-3 flex-wrap';
+        buttons.innerHTML = '<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">➕ Add Item</button>' +
+                           '<button onclick="exportToCSV()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">📁 Export to CSV</button>';
+        buttons.insertBefore(document.querySelector('#calculator').parentElement, calcSection);
+        
+        // Store data for export function
+        document.getElementById('inventoryList').dataset.items = JSON.stringify(INVENTORY_DATA);
+    }
+}
+
+// Export inventory to CSV
+function exportToCSV() {
+    const headers = ["Item Name", "Wear", "Value USD", "Category"];
+    const rows = [headers.join(",")];
+    
+    const items = document.getElementById('inventoryList').dataset.items ? JSON.parse(document.getElementById('inventoryList').dataset.items) : [];
+    items.forEach(item => {
+        const safeName = `"${item.name.replace(/"/g, '""')}"`;
+        rows.push(`${safeName},${item.wear.toFixed(2)},${item.value_usd.toFixed(2)},${item.category}`);
+    });
+
+    const csvContent = rows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'skiniify_inventory.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+// Render inventory on page load
+renderInventory();
+</script>
