@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import api from '@/src/api';
+import api from '../../api';
 
 // Premium Design Constants
 const DESIGN = {
