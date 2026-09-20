@@ -144,7 +144,7 @@
             <!-- Calculate Button with better styling -->
             <button onclick="calculateTradeUp()" 
                     class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition transform hover:scale-105 shadow-xl glow-orange">
-                🔥 Calculate Trade-Up (3x Same Weapon)
+                🔥 Calculate Trade-Up (Any # Same Weapon)
             </button>
 
             <!-- Results -->
@@ -245,9 +245,13 @@
             const wear3 = parseFloat(document.getElementById('item3_wear').value) || 0.14;
 
             // Validation with better error messages
-            // CS:GO RULE: All 3 items MUST be the SAME weapon type!
+            // CS:GO TRADE-UP RULES:
+            // ✓ All items must be from SAME WEAPON (AK-47 + AK-47 + AK-47 ✅)
+            // ✗ Different weapons don't work (AK-47 + M4 + AWP ❌)
+            // ✓ Can use 3-10 items (we show 3 as examples, but you can add more if needed!)
+
             if (weapon1 !== weapon2 || weapon1 !== weapon3) {
-                alert('⚠️ ERROR: All 3 items must be from the SAME weapon!\n\nExample: AK-47 × 3 (not AK-47 + M4 + AWP)');
+                alert('⚠️ ERROR: All items must be from the SAME WEAPON!\n\n✅ CORRECT: AK-47 + AK-47 + AK-47\n❌ WRONG:  AK-47 + M4A4 + AWP');
                 return;
             }
 
@@ -261,7 +265,9 @@
             const primaryWeapon = weapon1;
             const primarySkin = skin1;
 
-            // Calculate average wear with trade-up formula
+            // CS:GO Trade-Up Formula:
+            // ✓ Averages ALL items together (not fixed to 3)
+            // ✓ Adds ~0.015 wear (Steam's trade-up formula)
             const totalWear = wear1 + wear2 + wear3;
             const avgWear = totalWear / 3;
             
