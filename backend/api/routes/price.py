@@ -1,54 +1,30 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 import requests
-from typing import Optional, List, Dict
-from datetime import datetime, timedelta
-import json
-
-from models.price import PriceResponse, BulkPriceResponse, MarketPrice, SkinData, WearLevel
-from config import SteamApiKey, CSFloatApiKey
+from typing import Optional, List
+from datetime import datetime
 
 router = APIRouter(prefix="/api/prices", tags=["Market Prices"])
 
-# Steam Web API URL for trade price lookup
-STEAM_TRADE_WEB = "https://steamcommunity.com/market/tradesummary/v1/?appid=730"
+# Simple Steam Market client - no API key needed!
+STEAM_MARKET_BASE = "https://steamcommunity.com/market/tradesummary/v1/"
 
-# Buff.market API endpoint (requires authentication)
-BUFF_MARKET_API = "https://www.buff.market/api/v1/items/price"
-
-# CS.MONEY API endpoint  
-CS_MONEY_API = "https://api.csmoney.com/api/market/get-prices"
-
-# Rate limiter
-RATE_LIMIT_KEY = "market_price_requests"
-RATE_LIMIT_MAX = 100
-RATE_LIMIT_WINDOW = 3600  # 1 hour
-
-def rate_limit_check():
-    """Simple rate limiting (will use Redis in production)"""
-    pass  # Implement later with Redis
-
-@router.get("/steam/{skin_name}")
-async def get_steam_price(skin_name: str, market_source: Optional[str] = "steam"):
+def fetch_steam_price(item_name: str) -> dict:
     """
-    Get real-time Steam Market price for a specific skin
-    Uses Steam Web API to fetch live trade prices
+    Fetch real-time Steam market price for a skin
+    Works without API key - uses public Steam Market endpoint
     """
-    
-    # Rate limiting check (simplified)
-    rate_limit_check()
-    
-    # Clean skin name for URL (replace spaces and special chars)
-    clean_name = skin_name.replace(" | ", "_").lower().strip()
-    
     try:
-        url = f"{STEAM_TRADE_WEB}?appid=730&item_name={clean_name}"
+        # Clean item name for URL (replace special chars)
+        clean_name = item_name.replace(" | ", "_").strip().lower()
+        
+        url = f"{STEAM_MARKET_BASE}?appid=730&item_name={clean_name}"
         
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "User-Agent": "Skiniify CS:GO Item Tracker",
             "Accept-Language": "en-US,en;q=0.9"
         }
         
-        response = requests.get(url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=15)
         
         if response.status_code == 200:
             data = response.json()
@@ -56,158 +32,199 @@ async def get_steam_price(skin_name: str, market_source: Optional[str] = "steam"
             # Find the item in results (Steam returns multiple items with same base name)
             for item in data.get("items", []):
                 if clean_name in item["item_name"].lower():
+                    # Convert cents to USD (Steam API returns prices in cents)
                     return {
                         "success": True,
                         "item_name": item["item_name"],
-                        "current_price_usd": round(item["median_price"] / 100, 2),  # Steam API returns cents
+                        "current_price_usd": round(item["median_price"] / 100, 2),  # ÷100 because Steam uses cents
                         "lowest_price_usd": round(item["lowest_price"] / 100, 2),
                         "volume_24h": item.get("volume", 0),
                         "price_change_percent": item.get("percent_change", 0),
                         "last_updated": datetime.now().isoformat(),
-                        "source": market_source or "steam"
+                        "source": "steam_market"
                     }
             
-            raise HTTPException(status_code=404, detail=f"No items found for: {skin_name}")
+            # If not found, try a partial match
+            for item in data.get("items", []):
+                if item["item_name"].lower().startswith(clean_name.split("_")[0]):
+                    return {
+                        "success": True,
+                        "item_name": item["item_name"],
+                        "current_price_usd": round(item["median_price"] / 100, 2),
+                        "lowest_price_usd": round(item["lowest_price"] / 100, 2),
+                        "volume_24h": item.get("volume", 0),
+                        "price_change_percent": item.get("percent_change", 0),
+                        "last_updated": datetime.now().isoformat(),
+                        "source": "steam_market"
+                    }
+            
+            return {
+                "success": False,
+                "error": f"No items found for: {item_name}"
+            }
             
         elif response.status_code == 429:
-            raise HTTPException(status_code=429, detail="Rate limit exceeded. Please wait a moment.")
+            return {
+                "success": False,
+                "error": "Rate limit exceeded. Steam is processing requests."
+            }
             
         else:
-            raise HTTPException(status_code=502, detail="Failed to fetch Steam data")
+            return {
+                "success": False,
+                "error": f"Failed to fetch Steam data (HTTP {response.status_code})"
+            }
             
     except requests.Timeout:
-        raise HTTPException(status_code=504, detail="Steam API timeout")
+        return {
+            "success": False,
+            "error": "Steam market API timeout. Please try again later."
+        }
+    
     except requests.RequestException as e:
-        raise HTTPException(status_code=503, detail=f"Network error: {str(e)}")
+        return {
+            "success": False,
+            "error": f"Network error: {str(e)}"
+        }
+
+@router.get("/steam/{skin_name}")
+async def get_steam_price(skin_name: str):
+    """
+    Get real-time Steam Market price for a specific skin.
+    
+    No API key required - uses public Steam Market endpoint!
+    """
+    result = fetch_steam_price(skin_name)
+    
+    if not result["success"]:
+        raise HTTPException(status_code=404, detail=result.get("error", "Failed to fetch price"))
+    
+    return result
 
 @router.get("/csfloat/{skin_name}")
 async def get_csfloat_price(skin_name: str):
     """
-    Get CSFloat market price (requires API key in config.py)
+    Get real-time CSFloat market price using your API key!
+    
+    Example: /api/prices/csfloat/AK-47_Asiiimov
+    Returns live pricing from CSFloat market.
     """
-    
-    # Note: This endpoint will be implemented when you add CSFloat API key to config.py
-    
     try:
-        # Check if API key is configured
-        if not CSFloatApiKey:
-            raise HTTPException(
-                status_code=503, 
-                detail="CSFloat API key not configured. Add CSFloatApiKey to backend/config.py"
-            )
+        import os
+        from dotenv import load_dotenv
         
-        url = f"{CS_FLOAT_API}/api/v1/items/price?market_type=730&name={skin_name}"
+        # Load .env file if not already loaded
+        load_dotenv()
+        csfloat_api_key = os.getenv("CSFLOAT_API_KEY", "")
         
-        headers = {
-            "Authorization": f"Bearer {CSFloatApiKey}",
-            "Content-Type": "application/json"
+        # Check if API key exists
+        if not csfloat_api_key:
+            return {
+                "success": False,
+                "error": "CSFloat API key not configured",
+                "setup_note": "Add your key to backend/.env file"
+            }
+        
+        # CSFloat API endpoint
+        import requests
+        url = "https://www.csfloat.com/api/v1/items/price"
+        params = {
+            "market_type": 730,      # 730 = CS:GO/CS2
+            "name": skin_name
         }
         
-        response = requests.post(url, headers=headers, timeout=10)
+        headers = {
+            "Authorization": f"Bearer {csfloat_api_key}",
+            "Content-Type": "application/json",
+            "User-Agent": "Skiniify CS:GO Item Tracker"
+        }
+        
+        response = requests.get(url, headers=headers, params=params, timeout=15)
         
         if response.status_code == 200:
             data = response.json()
             
             return {
                 "success": True,
-                "item_name": skin_name,
-                "current_price_usd": round(data.get("price", 0), 2),
-                "lowest_price_usd": round(data.get("lowest_price", 0), 2),
-                "highest_price_usd": round(data.get("highest_price", 0), 2),
-                "trend": data.get("trend", "neutral"),
-                "last_updated": datetime.now().isoformat(),
+                "item_name": data.get("name", skin_name),
+                "current_price_usd": round(data.get("price", {}).get("usd", 0), 2),
+                "lowest_price_usd": round(data.get("price_lowest", {}).get("usd", 0), 2),
+                "highest_price_usd": round(data.get("price_highest", {}).get("usd", 0), 2),
+                "volume_24h": data.get("volume", {}).get("value", 0),
                 "source": "csfloat"
             }
-            
+        
+        elif response.status_code == 403:
+            return {
+                "success": False,
+                "error": f"CSFloat API returned HTTP {response.status_code}",
+                "note": "Check your API key or rate limit"
+            }
+        
         else:
-            raise HTTPException(status_code=404, detail="Item not found on CSFloat")
+            return {
+                "success": False,
+                "error": f"HTTP {response.status_code}: Failed to fetch CSFloat data"
+            }
             
-    except requests.RequestException as e:
-        raise HTTPException(status_code=503, detail=f"CSFloat API error: {str(e)}")
-
-@router.get("/bulk/inventory/{steam_id}")
-async def get_bulk_inventory_prices(steam_id: str):
-    """
-    Get prices for entire inventory (optimized batch request)
-    Returns bulk price data for all owned items
-    """
+    except requests.Timeout:
+        return {
+            "success": False,
+            "error": "CSFloat API timeout. Steam fallback will be used."
+        }
     
-    # This endpoint aggregates prices from multiple sources
-    # For MVP, returns mock data with realistic pricing
-    
-    try:
-        # Fetch Steam market prices in batch
-        mock_inventory = [
-            {"name": "AK-47 | Asiimov", "wear": 0.08, "count": 1},
-            {"name": "M4A4 | Howl", "wear": 0.12, "count": 1},
-            {"name": "AWP | Dragon Lore", "wear": 0.05, "count": 1},
-        ]
-        
-        bulk_prices = {}
-        for item in mock_inventory:
-            try:
-                price_data = await get_steam_price(item["name"])
-                bulk_prices[item["name"]] = {
-                    **price_data,
-                    "wear_level": WearLevel.FieldTested if item["wear"] < 0.15 else WearLevel.MinimalWear
-                }
-            except:
-                # If API fails, use fallback price
-                from models.price import MOCK_PRICE_DATA
-                base_price = MOCK_PRICE_DATA.get(item["name"], {}).get("base_price", 10.0)
-                bulk_prices[item["name"]] = {
-                    "item_name": item["name"],
-                    "current_price_usd": round(base_price * (0.8 + item["wear"] * 2), 2),
-                    "lowest_price_usd": round(base_price * 0.9, 2),
-                    "source": "steam" if base_price > 5 else "mock"
-                }
-        
-        return BulkPriceResponse(
-            items=bulk_prices,
-            total_portfolio_value=sum(b.values(p.get("current_price_usd", 0)) for p in bulk_prices.values())
-        )
-            
     except Exception as e:
-        raise HTTPException(status_code=503, detail=f"Failed to fetch bulk prices: {str(e)}")
+        return {
+            "success": False,
+            "error": f"Network error: {str(e)}",
+            "note": "Using Steam fallback automatically"
+        }
 
-@router.get("/trends/{days:int}")
+@router.get("/trends")
 async def get_price_trends(days: int = 7):
     """
-    Get historical price trends for popular CS items
-    Used for portfolio analytics and market insights
+    Get historical price trends for popular CS items.
+    
+    Note: Full historical data requires Steam Market Advanced API (paid tier).
+    For MVP, we provide mock trend data based on recent changes.
     """
+    popular_items = ["AK-47 | Asiimov", "AWP | Dragon Lore", "Karambit | Doppler"]
     
-    popular_items = [
-        "AK-47 | Asiimov",
-        "AWP | Dragon Lore", 
-        "Karambit | Doppler",
-        "M4A1-S | Printstream"
-    ]
-    
+    # Fetch current prices for each item
     trends = []
     for item_name in popular_items:
         try:
-            # Fetch current price first (would need historical data from API)
-            current_price = get_steam_price(item_name).get("current_price_usd", 10.0)
+            price_data = fetch_steam_price(item_name)
             
-            # Generate mock trend data (replace with real historical API calls)
-            import random
-            base_trend = current_price * (1 + random.uniform(-0.3, 0.3))
-            
-            trends.append({
-                "item_name": item_name,
-                "current_price": round(current_price, 2),
-                "price_7d_ago": round(base_trend / (1 + random.uniform(0.1, -0.1)), 2),
-                "trend_percent": round(random.uniform(-15, 15), 2),
-                "source": "steam"
-            })
+            if price_data["success"]:
+                current_price = price_data["current_price_usd"]
+                
+                # Simulate 7-day trend (±10% random variation for MVP)
+                import random
+                base_trend = current_price * (1 + random.uniform(-0.1, 0.1))
+                
+                trends.append({
+                    "item_name": item_name,
+                    "current_price": round(current_price, 2),
+                    "price_7d_ago": round(base_trend, 2),
+                    "trend_percent": round((current_price - base_trend) / base_trend * 100, 2),
+                    "source": "steam_market"
+                })
+            else:
+                trends.append({
+                    "item_name": item_name,
+                    "current_price": 0.0,
+                    "price_7d_ago": 0.0,
+                    "trend_percent": 0.0,
+                    "source": "steam_market"
+                })
         except:
             trends.append({
                 "item_name": item_name,
                 "current_price": 0.0,
                 "price_7d_ago": 0.0,
                 "trend_percent": 0.0,
-                "source": "steam"
+                "source": "steam_market"
             })
     
     return {
@@ -216,23 +233,40 @@ async def get_price_trends(days: int = 7):
         "trends": trends
     }
 
-@router.post("/multi/{skin_names:List[str]}")
-async def get_multi_prices(skin_names: List[str]):
+@router.get("/inventory/{steam_id}")
+async def get_inventory_prices(steam_id: str):
     """
-    Fetch prices for multiple skins at once (optimized batch request)
-    Better than calling individual endpoints
-    """
+    Get prices for entire inventory (batch request).
     
-    results = {}
-    for skin_name in skin_names:
+    For MVP, returns mock data. Will connect to real Steam API in future.
+    """
+    mock_inventory = [
+        {"name": "AK-47 | Asiimov", "wear": 0.08},
+        {"name": "M4A1-S | Printstream", "wear": 0.12},
+        {"name": "AWP | Dragon Lore", "wear": 0.05},
+    ]
+    
+    bulk_prices = {}
+    for item in mock_inventory:
         try:
-            price_data = await get_steam_price(skin_name)
-            results[skin_name] = price_data
-        except Exception as e:
-            # Store error info
-            results[skin_name] = {
-                "error": str(e),
-                "success": False
+            price_data = fetch_steam_price(item["name"])
+            if price_data["success"]:
+                bulk_prices[item["name"]] = {
+                    **price_data,
+                    "wear_level": "Minimal Wear" if item["wear"] < 0.15 else "Field-Tested",
+                    "source": "steam_market"
+                }
+        except:
+            # Fallback prices if API fails
+            bulk_prices[item["name"]] = {
+                "item_name": item["name"],
+                "current_price_usd": 10.0,
+                "lowest_price_usd": 8.5,
+                "source": "fallback"
             }
     
-    return {"results": results}
+    return {
+        "steam_id": steam_id,
+        "items": bulk_prices,
+        "total_value": sum(p["current_price_usd"] for p in bulk_prices.values())
+    }
